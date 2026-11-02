@@ -1,0 +1,27 @@
+# Only the sources consumed by Dockerfile enter the build context.
+**
+!Dockerfile
+!Cargo.toml
+!Cargo.lock
+!LICENSE
+!THIRD_PARTY_NOTICES.md
+!src/
+!src/**
+!tests/
+!tests/**
+!config/
+!config/variables.json
+!scripts/
+!scripts/stamp_native_version.py
+!scripts/collect_licenses.py
+!scripts/docker-entrypoint.sh
+# Defence in depth, even below the allowed source directories
+**/__pycache__
+**/*.pyc
+**/.env
+**/*.onnx
+**/*.nemo
+**/*.safetensors
+**/*.wav
+**/*.key
+**/*.pem

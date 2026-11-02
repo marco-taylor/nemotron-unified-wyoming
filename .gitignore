@@ -1,0 +1,65 @@
+# Local models, build products, corpora and inference results
+/target/
+/models/
+/benchmarks/audio/
+/benchmarks/results/
+*.onnx
+*.onnx.data
+*.nemo
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.wav
+*.flac
+*.mp3
+*.whl
+*.tar
+*.tar.gz
+*.zip
+*.so
+*.so.*
+# Local export environments, downloads and machine-specific reports
+/export/bootstrap/
+/export/venv/
+/export/downloads/
+/export/source/
+/export/metadata-cache/
+/export/tmp/
+/export/reports/
+/export/cpu-wheels.html
+/export/Dockerfile.prepared.txt
+# Raw evidence can contain container/environment metadata or signed download URLs.
+/docs/evidence/**
+!/docs/evidence/sherpa-LICENSE
+!/docs/evidence/phase4-model-LICENSE.md
+# Credentials and local configuration; documented examples are allowed
+.env
+.env.*
+!.env.example
+*.env
+!*.env.example
+*credentials*
+*secrets*
+*.pem
+*.key
+id_ed25519*
+.ssh/
+.docker/
+.config/
+*.log
+*.pid
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+.vscode/
+.idea/
+/export/compat/
+
+# Original user-provided icons are retained locally; canonical copies live in assets.
+/icons/
+# Local workspace-wide audits contain paths from unrelated projects; retain locally.
+/docs/NEMOTRON_FOLDER_AUDIT.md
+/docs/NEMOTRON_CLEANUP.md

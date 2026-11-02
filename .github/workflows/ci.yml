@@ -1,0 +1,31 @@
+name: Build and test
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  linux-amd64:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - name: Validate configuration and publication contents
+        run: |
+          python3 -m venv /tmp/nemotron-validation
+          /tmp/nemotron-validation/bin/pip install jsonschema==4.25.1 PyYAML==6.0.3
+          /tmp/nemotron-validation/bin/python scripts/validate_configs.py
+          python3 scripts/audit_publication.py
+          python3 scripts/audit_publication.py --history
+      - name: Build release image and run format, unit, TCP, interop and Clippy checks
+        run: docker build --progress=plain --target runtime -t nemotron-unified-rust-wyoming:ci .
+      - name: Verify runtime identity without downloading weights
+        run: |
+          docker run --rm --network none nemotron-unified-rust-wyoming:ci --version
+          if docker run --rm --network none nemotron-unified-rust-wyoming:ci serve; then
+            echo 'Missing models unexpectedly accepted'
+            exit 1
+          fi

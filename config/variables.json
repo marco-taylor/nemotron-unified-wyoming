@@ -1,0 +1,116 @@
+[
+  [
+    "PUID",
+    "99",
+    "Benutzer-ID des Servers",
+    "Ganzzahl 1 bis 2147483647 ohne führende Nullen; Startskript wechselt vor Inferenz auf diese UID. 0 ist ausgeschlossen."
+  ],
+  [
+    "PGID",
+    "100",
+    "Gruppen-ID des Servers",
+    "Ganzzahl 1 bis 2147483647 ohne führende Nullen; primäre GID, 0 ist ausgeschlossen. Modell muss lesbar sein."
+  ],
+  [
+    "WYOMING_HOST",
+    "0.0.0.0",
+    "Bind-Adresse",
+    "IPv4 oder IPv6 im Container; für Docker-Bridge 0.0.0.0 verwenden."
+  ],
+  [
+    "WYOMING_PORT",
+    "10300",
+    "Wyoming-Port im Container",
+    "1 bis 65535; Container-Portabbildung bei Änderung ebenfalls anpassen."
+  ],
+  [
+    "LANGUAGE",
+    "de",
+    "Sprache",
+    "Deutsch (de); andere Sprachen werden in diesem Server abgewiesen."
+  ],
+  [
+    "STT_DEVICE",
+    "cpu",
+    "Inferenzgerät",
+    "Dieses Image unterstützt ausschließlich CPU; GPU/CUDA werden abgewiesen."
+  ],
+  [
+    "MODEL_DIR",
+    "/models",
+    "Modellverzeichnis im Container",
+    "Basis für relative Modellpfade; muss zum schreibgeschützten Modellmount passen."
+  ],
+  [
+    "ENCODER_PATH",
+    "",
+    "Encoderpfad (optional)",
+    "Leer: encoder.int8.onnx unter MODEL_DIR; sonst relativer oder absoluter Containerpfad."
+  ],
+  [
+    "DECODER_PATH",
+    "",
+    "Decoderpfad (optional)",
+    "Leer: decoder.onnx unter MODEL_DIR; alle Dateien aus demselben Export verwenden."
+  ],
+  [
+    "JOINER_PATH",
+    "",
+    "Joinerpfad (optional)",
+    "Leer: joiner.onnx unter MODEL_DIR; relativer oder absoluter Containerpfad."
+  ],
+  [
+    "TOKENS_PATH",
+    "",
+    "Tokenizerpfad (optional)",
+    "Leer: tokens.txt unter MODEL_DIR; passend zum exportierten Modell."
+  ],
+  [
+    "THREADS",
+    "2",
+    "ORT-Inferenzthreads",
+    "1, 2 oder 4; für Intel N100 werden 2 empfohlen. Kein hartes Prozess-Threadlimit."
+  ],
+  [
+    "MAX_AUDIO_SECONDS",
+    "120",
+    "Maximale Audiodauer",
+    "1 bis 120 Sekunden pro Anfrage; Überschreitung verwirft die Sitzung."
+  ],
+  [
+    "MAX_AUDIO_CHUNK_BYTES",
+    "320000",
+    "Maximale Audio-Payload",
+    "Gerade Zahl von 640 bis 320000 Byte; Grenze vor der Payload-Allokation."
+  ],
+  [
+    "MAX_CONNECTIONS",
+    "8",
+    "Maximale Verbindungen",
+    "1 bis 32; begrenzt Sitzungen und Queue. Native Inferenz bleibt serialisiert."
+  ],
+  [
+    "CLIENT_TIMEOUT_SECONDS",
+    "30",
+    "Client-Timeout",
+    "1 bis 300 Sekunden; absolute Framefrist und Socket-Schreibtimeout."
+  ],
+  [
+    "INFERENCE_CHUNK_MS",
+    "20",
+    "Native Zuführung in Millisekunden",
+    "10 bis 560 ms; teilt empfangene Chunks maximal so groß auf. Ändert nicht L37-Kontext oder algorithmische Latenz."
+  ],
+  [
+    "LOG_LEVEL",
+    "info",
+    "Protokollierungsstufe",
+    "error, warn, info oder debug; Großschreibung erlaubt. Betrifft Rust-Logs, nicht native ORT-Fehler."
+  ],
+  [
+    "LOG_TRANSCRIPTS",
+    "false",
+    "Erkannte Texte protokollieren",
+    "true oder false; nur bei info/debug. Enthält möglicherweise persönliche Sprachinhalte."
+  ]
+]

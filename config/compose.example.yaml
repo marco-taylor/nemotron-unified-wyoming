@@ -1,0 +1,4 @@
+# Compatibility entry point; canonical deployment configuration is ./docker-compose.yml.
+include:
+  - path: ../docker-compose.yml
+    project_directory: ..

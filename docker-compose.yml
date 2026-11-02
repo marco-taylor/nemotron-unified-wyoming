@@ -1,0 +1,51 @@
+services:
+  nemotron-wyoming:
+    image: ${IMAGE:-nemotron-unified-rust-wyoming:dev}
+    build:
+      context: .
+      target: runtime
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [SETUID, SETGID]
+    security_opt: ["no-new-privileges:true"]
+    ports:
+      - "${PUBLISH_ADDRESS:-0.0.0.0}:${HOST_PORT:-10310}:${WYOMING_PORT:-10300}/tcp"
+    volumes:
+      - type: bind
+        source: ${MODEL_DIR:?Set MODEL_DIR to the prepared L37-runtime directory}
+        target: /models
+        read_only: true
+        bind:
+          create_host_path: false
+    environment:
+      PUID: "${PUID:-99}"
+      PGID: "${PGID:-100}"
+      WYOMING_HOST: "${WYOMING_HOST:-0.0.0.0}"
+      WYOMING_PORT: "${WYOMING_PORT:-10300}"
+      LANGUAGE: "${LANGUAGE:-de}"
+      STT_DEVICE: "${STT_DEVICE:-cpu}"
+      MODEL_DIR: /models
+      ENCODER_PATH: "${ENCODER_PATH:-}"
+      DECODER_PATH: "${DECODER_PATH:-}"
+      JOINER_PATH: "${JOINER_PATH:-}"
+      TOKENS_PATH: "${TOKENS_PATH:-}"
+      THREADS: "${THREADS:-2}"
+      MAX_AUDIO_SECONDS: "${MAX_AUDIO_SECONDS:-120}"
+      MAX_AUDIO_CHUNK_BYTES: "${MAX_AUDIO_CHUNK_BYTES:-320000}"
+      MAX_CONNECTIONS: "${MAX_CONNECTIONS:-8}"
+      CLIENT_TIMEOUT_SECONDS: "${CLIENT_TIMEOUT_SECONDS:-30}"
+      INFERENCE_CHUNK_MS: "${INFERENCE_CHUNK_MS:-20}"
+      LOG_LEVEL: "${LOG_LEVEL:-info}"
+      LOG_TRANSCRIPTS: "${LOG_TRANSCRIPTS:-false}"
+    mem_limit: 4g
+    cpus: 4
+    pids_limit: 128
+    stop_grace_period: 60s
+    tmpfs:
+      - /tmp:size=16m,noexec,nosuid,nodev
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

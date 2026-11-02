@@ -1,0 +1,12 @@
+# Successful CPU export environment, 2026-11-01.
+# Complete artifact hashes: export/requirements.lock; source commit/archive hash in export/reports.
+torch==2.7.1+cpu
+torchaudio==2.7.1+cpu
+numpy==2.2.6
+onnx==1.18.0
+# PyPI has no 1.28.2 wheel in the checked registry. Separate from native ORT 1.28.2.
+onnxruntime==1.23.2
+# Keep Lightning implementation aligned with NeMo's <=2.4 umbrella requirement.
+pytorch-lightning==2.4.0
+# Preserve pkg_resources for source packages still using it.
+setuptools==80.9.0
