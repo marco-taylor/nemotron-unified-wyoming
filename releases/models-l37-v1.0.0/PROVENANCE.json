@@ -1,0 +1,98 @@
+{
+  "release_tag_planned": "models-l37-v1.0.0",
+  "release_state": "approved model release; exact assets versioned by models-l37-v1.0.0",
+  "model_trained_by": "NVIDIA",
+  "trained_by_this_project": false,
+  "upstream_model": "nvidia/nemotron-labs-unified-asr-0.6b",
+  "upstream_revision": "023ce907267a09a308a5cb69239447cb3d0c1597",
+  "upstream_checkpoint": "nemotron-labs-unified-asr-0.6b.nemo",
+  "upstream_checkpoint_sha256": "1718cc1b44fb8597b2356328d706a8d89f31c389ca6f2256c2e3f743c0246936",
+  "upstream_checkpoint_bytes": 2507735040,
+  "model_license": "OpenMDW-1.1",
+  "copyright": "Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.",
+  "adaptation": "ONNX export, L37 context, partial encoder QUInt8 quantization; no training or fine-tuning by this project",
+  "exporter": "k2-fsa/sherpa-onnx scripts/nemo/nemotron-labs-unified-asr-0.6b/export_onnx.py",
+  "exporter_revision": "31ba0e438f8065189a8e5589d84dfd7faf516d3d",
+  "exporter_license": "Apache-2.0 (tool, not replacement model license)",
+  "context": {
+    "left": 37,
+    "center": 7,
+    "right": 7
+  },
+  "quantization": "encoder partially QUInt8 (265 MatMulInteger); decoder/joiner FP32",
+  "local_export_record": "docs/PHASE4_RESULTS.md and export/reports/final-bundle-audit.json",
+  "notice_sources": [
+    {
+      "asset": "LICENSE.OpenMDW-1.1.md",
+      "upstream_path": "LICENSE.md",
+      "url": "https://huggingface.co/nvidia/nemotron-labs-unified-asr-0.6b/resolve/023ce907267a09a308a5cb69239447cb3d0c1597/LICENSE.md",
+      "git_blob_sha1": "1107fb7da484d744e461091403dab1732f778537",
+      "sha256": "222d7f77ca2f2c26bf45156776b6d70207a9f963b3d9ff43e659684c1ddd4895"
+    },
+    {
+      "asset": "MODEL_CARD.NVIDIA.md",
+      "upstream_path": "README.md",
+      "url": "https://huggingface.co/nvidia/nemotron-labs-unified-asr-0.6b/resolve/023ce907267a09a308a5cb69239447cb3d0c1597/README.md",
+      "git_blob_sha1": "55853e9c499ab4178aae8cb04598b6f59d0003ec",
+      "sha256": "d02e62476e0ef2e146f02b99def75c90ba3db6801873d91c72837a799a03b3d2"
+    },
+    {
+      "asset": "bias.md",
+      "upstream_path": "bias.md",
+      "url": "https://huggingface.co/nvidia/nemotron-labs-unified-asr-0.6b/resolve/023ce907267a09a308a5cb69239447cb3d0c1597/bias.md",
+      "git_blob_sha1": "1ca99f1dd6346589dcfed0fa92af49df1d3b1557",
+      "sha256": "beae153d3aeccb9f226691377f3916c82fe3e23e7e65a5d032188abfd2512d23"
+    },
+    {
+      "asset": "explainability.md",
+      "upstream_path": "explainability.md",
+      "url": "https://huggingface.co/nvidia/nemotron-labs-unified-asr-0.6b/resolve/023ce907267a09a308a5cb69239447cb3d0c1597/explainability.md",
+      "git_blob_sha1": "44e8abfa2a5d30a11d1d6b7af42340c2321936d0",
+      "sha256": "20d9008a049c3dfc1bbcf60749252eadba9627ac844d25f4b02cdb0ae8391aee"
+    },
+    {
+      "asset": "privacy.md",
+      "upstream_path": "privacy.md",
+      "url": "https://huggingface.co/nvidia/nemotron-labs-unified-asr-0.6b/resolve/023ce907267a09a308a5cb69239447cb3d0c1597/privacy.md",
+      "git_blob_sha1": "30cbc020cf9963b2668bb72098b1b56f5cbf2b81",
+      "sha256": "8a474d512f434c6642589eb05913d3c5142facc2ea1e1720e0292185b5ed8574"
+    },
+    {
+      "asset": "safety.md",
+      "upstream_path": "safety.md",
+      "url": "https://huggingface.co/nvidia/nemotron-labs-unified-asr-0.6b/resolve/023ce907267a09a308a5cb69239447cb3d0c1597/safety.md",
+      "git_blob_sha1": "79bce9e3232a2c41c511df0c2c9a285192582703",
+      "sha256": "11d9884a9bc5b739dc91e3ce525cef09d5a602ea3fc80eec039eebdd41c9a8b1"
+    }
+  ],
+  "runtime_files": [
+    {
+      "name": "encoder.int8.onnx",
+      "size": 675328677,
+      "sha256": "8e1b140b85900dcaede7e5fc05c1adfd48d4a0585e3b55ec2a10cded7042c96d",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/encoder.int8.onnx",
+      "local_source": "models/L37-runtime/encoder.int8.onnx"
+    },
+    {
+      "name": "decoder.onnx",
+      "size": 36745480,
+      "sha256": "e5281215d86116e425191324830090922ec7732a34b1f5203d3b5a3564a20d97",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/decoder.onnx",
+      "local_source": "models/L37-runtime/decoder.onnx"
+    },
+    {
+      "name": "joiner.onnx",
+      "size": 14768802,
+      "sha256": "7abd80133827b59dbd3b57c47242d6001607ed14acda5db36ae28d64a3de8af8",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/joiner.onnx",
+      "local_source": "models/L37-runtime/joiner.onnx"
+    },
+    {
+      "name": "tokens.txt",
+      "size": 42928,
+      "sha256": "94139a0b2134fd40664ca72260026fa8a073336bb2f062239c8ecde2c8031763",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/tokens.txt",
+      "local_source": "models/L37-runtime/tokens.txt"
+    }
+  ]
+}

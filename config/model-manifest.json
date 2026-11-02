@@ -1,9 +1,9 @@
 {
   "model": "Nemotron Labs Unified ASR 0.6B L37 INT8",
-  "source_revision": "e141dff433df9ab1962eec4d8d494560f9a02009",
+  "source_revision": "023ce907267a09a308a5cb69239447cb3d0c1597",
   "source_checkpoint_sha256": "1718cc1b44fb8597b2356328d706a8d89f31c389ca6f2256c2e3f743c0246936",
   "upstream_url": "https://huggingface.co/nvidia/nemotron-labs-unified-asr-0.6b",
-  "license_url": "https://huggingface.co/nvidia/nemotron-labs-unified-asr-0.6b/blob/e141dff433df9ab1962eec4d8d494560f9a02009/LICENSE.md",
+  "license_url": "https://huggingface.co/nvidia/nemotron-labs-unified-asr-0.6b/blob/023ce907267a09a308a5cb69239447cb3d0c1597/LICENSE.md",
   "export_context": {"left":37,"center":7,"right":7},
   "quantization": "encoder partially QUInt8 (265 MatMulInteger); decoder/joiner FP32",
   "sherpa_revision": "31ba0e438f8065189a8e5589d84dfd7faf516d3d",

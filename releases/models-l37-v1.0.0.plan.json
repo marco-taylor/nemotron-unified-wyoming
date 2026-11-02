@@ -1,0 +1,109 @@
+{
+  "state": "approved publication plan; actual publication status recorded in docs/PHASE12_PUBLICATION.md",
+  "tag": "models-l37-v1.0.0",
+  "repository": "marco-taylor/nemotron-unified-wyoming",
+  "make_latest": false,
+  "immutable_release_recommended": true,
+  "assets": [
+    {
+      "name": "encoder.int8.onnx",
+      "local_source": "models/L37-runtime/encoder.int8.onnx",
+      "bytes": 675328677,
+      "sha256": "8e1b140b85900dcaede7e5fc05c1adfd48d4a0585e3b55ec2a10cded7042c96d",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/encoder.int8.onnx"
+    },
+    {
+      "name": "decoder.onnx",
+      "local_source": "models/L37-runtime/decoder.onnx",
+      "bytes": 36745480,
+      "sha256": "e5281215d86116e425191324830090922ec7732a34b1f5203d3b5a3564a20d97",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/decoder.onnx"
+    },
+    {
+      "name": "joiner.onnx",
+      "local_source": "models/L37-runtime/joiner.onnx",
+      "bytes": 14768802,
+      "sha256": "7abd80133827b59dbd3b57c47242d6001607ed14acda5db36ae28d64a3de8af8",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/joiner.onnx"
+    },
+    {
+      "name": "tokens.txt",
+      "local_source": "models/L37-runtime/tokens.txt",
+      "bytes": 42928,
+      "sha256": "94139a0b2134fd40664ca72260026fa8a073336bb2f062239c8ecde2c8031763",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/tokens.txt"
+    },
+    {
+      "name": "EXPORT_INFO.md",
+      "local_source": "releases/models-l37-v1.0.0/EXPORT_INFO.md",
+      "bytes": 1415,
+      "sha256": "cfc932f32456e80f5c74af95ce25b8b4476b3252a5e787525f0d2b26783b98a7",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/EXPORT_INFO.md"
+    },
+    {
+      "name": "LICENSE.OpenMDW-1.1.md",
+      "local_source": "releases/models-l37-v1.0.0/LICENSE.OpenMDW-1.1.md",
+      "bytes": 2845,
+      "sha256": "222d7f77ca2f2c26bf45156776b6d70207a9f963b3d9ff43e659684c1ddd4895",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/LICENSE.OpenMDW-1.1.md"
+    },
+    {
+      "name": "MODEL_CARD.NVIDIA.md",
+      "local_source": "releases/models-l37-v1.0.0/MODEL_CARD.NVIDIA.md",
+      "bytes": 65146,
+      "sha256": "d02e62476e0ef2e146f02b99def75c90ba3db6801873d91c72837a799a03b3d2",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/MODEL_CARD.NVIDIA.md"
+    },
+    {
+      "name": "PROVENANCE.json",
+      "local_source": "releases/models-l37-v1.0.0/PROVENANCE.json",
+      "bytes": 4873,
+      "sha256": "999280788c71628792004c97e9f736785baba5a7203397333e3510890450b13e",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/PROVENANCE.json"
+    },
+    {
+      "name": "bias.md",
+      "local_source": "releases/models-l37-v1.0.0/bias.md",
+      "bytes": 1289,
+      "sha256": "beae153d3aeccb9f226691377f3916c82fe3e23e7e65a5d032188abfd2512d23",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/bias.md"
+    },
+    {
+      "name": "explainability.md",
+      "local_source": "releases/models-l37-v1.0.0/explainability.md",
+      "bytes": 1898,
+      "sha256": "20d9008a049c3dfc1bbcf60749252eadba9627ac844d25f4b02cdb0ae8391aee",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/explainability.md"
+    },
+    {
+      "name": "model-manifest.json",
+      "local_source": "releases/models-l37-v1.0.0/model-manifest.json",
+      "bytes": 1939,
+      "sha256": "94c6a910f481b9f5d4d04b03929a5aed245d45fc01f2a60ad9eec0d3e987dcbb",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/model-manifest.json"
+    },
+    {
+      "name": "privacy.md",
+      "local_source": "releases/models-l37-v1.0.0/privacy.md",
+      "bytes": 4890,
+      "sha256": "8a474d512f434c6642589eb05913d3c5142facc2ea1e1720e0292185b5ed8574",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/privacy.md"
+    },
+    {
+      "name": "safety.md",
+      "local_source": "releases/models-l37-v1.0.0/safety.md",
+      "bytes": 707,
+      "sha256": "11d9884a9bc5b739dc91e3ce525cef09d5a602ea3fc80eec039eebdd41c9a8b1",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/safety.md"
+    },
+    {
+      "name": "SHA256SUMS",
+      "local_source": "releases/models-l37-v1.0.0/SHA256SUMS",
+      "bytes": 1054,
+      "sha256": "a95c15a9df4bb1af9fb0239a253a8c7bc5182428153283affcc0c3d8ca60a5aa",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/SHA256SUMS"
+    }
+  ],
+  "total_asset_bytes": 726971943,
+  "runtime_download_bytes": 726885887
+}
