@@ -2,6 +2,8 @@ name: GHCR main image (latest and dev, linux/amd64)
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**/*.md'
   workflow_dispatch:
     inputs:
       publish:
@@ -9,6 +11,11 @@ on:
         type: boolean
         required: true
         default: false
+      validated_digest:
+        description: 'Optional immutable public image digest to promote after rebuilding and testing main'
+        type: string
+        required: false
+        default: ''
 permissions:
   contents: read
 concurrency:
@@ -46,6 +53,17 @@ jobs:
             org.opencontainers.image.revision=${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: Select previously validated image for explicit promotion
+        if: github.event_name == 'workflow_dispatch' && inputs.validated_digest != ''
+        env:
+          VALIDATED_DIGEST: ${{ inputs.validated_digest }}
+        run: |
+          set -eu
+          printf '%s\n' "$VALIDATED_DIGEST" | grep -Eq '^sha256:[0-9a-f]{64}$'
+          IMAGE=ghcr.io/marco-taylor/nemotron-unified-wyoming
+          # Pull before login: a promoted candidate must already be public.
+          docker pull "$IMAGE@$VALIDATED_DIGEST"
+          docker tag "$IMAGE@$VALIDATED_DIGEST" nemotron-reviewed:main
       - name: Verify architecture, runtime and absence of model weights
         run: |
           test "$(docker image inspect nemotron-reviewed:main --format '{{.Architecture}}')" = amd64
