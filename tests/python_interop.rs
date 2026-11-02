@@ -1,5 +1,5 @@
 //! Runs the pinned official Python Wyoming codec in Docker (no host Python required).
-use nemotron_unified_rust_wyoming::wyoming::{read_event, write_event};
+use nemotron_unified_wyoming::wyoming::{read_event, write_event};
 use std::io::{Cursor, Write};
 use std::process::{Command, Stdio};
 #[test]
@@ -41,7 +41,7 @@ fn official_python_rust_bidirectional_wire_interop() {
 }
 #[test]
 fn official_typed_info_and_error_parse_rust_responses() {
-    use nemotron_unified_rust_wyoming::wyoming::{info, Event};
+    use nemotron_unified_wyoming::wyoming::{info, Event};
     let mut wire = vec![];
     write_event(&mut wire, &info("protocol-fixture-not-asr")).unwrap();
     write_event(

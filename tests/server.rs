@@ -1,5 +1,5 @@
 //! Real TCP and lifecycle tests. The explicitly named fixture is not an ASR model.
-use nemotron_unified_rust_wyoming::{
+use nemotron_unified_wyoming::{
     config::Config,
     inference::{Backend, RecognitionSession, SessionConfig},
     server,
@@ -228,7 +228,7 @@ fn backend_startup_failure_is_not_ready() {
         Config::from_values(|_| None).unwrap(),
         Arc::new(AtomicBool::new(false)),
         || {
-            Err(nemotron_unified_rust_wyoming::Error::Runtime(
+            Err(nemotron_unified_wyoming::Error::Runtime(
                 "model test failure".into(),
             ))
         },

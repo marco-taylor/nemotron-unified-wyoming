@@ -1,5 +1,5 @@
 //! Tiny protobuf metadata fixtures, not neural models and never used for recognition.
-use nemotron_unified_rust_wyoming::model::validate_l37;
+use nemotron_unified_wyoming::model::validate_l37;
 fn metadata_bytes(language: &str) -> Vec<u8> {
     let mut result = vec![];
     for (k, v) in [

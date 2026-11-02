@@ -11,10 +11,13 @@
 !tests/**
 !config/
 !config/variables.json
+!config/model-manifest.json
+!config/model-LICENSE.md
 !scripts/
 !scripts/stamp_native_version.py
 !scripts/collect_licenses.py
 !scripts/docker-entrypoint.sh
+!scripts/model-init.py
 # Defence in depth, even below the allowed source directories
 **/__pycache__
 **/*.pyc

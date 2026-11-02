@@ -1,7 +1,7 @@
 #!/bin/sh
 # Opt-in local image checks; no listening service succeeds, no downloads or host ports.
 set -eu
-image=${IMAGE:-ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest}
+image=${IMAGE:-ghcr.io/marco-taylor/nemotron-unified-wyoming:latest}
 test_results_dir=${TEST_RESULTS_DIR:-docs/evidence/phase5}
 out="$PWD/$test_results_dir"
 mkdir -p "$out"
@@ -11,11 +11,13 @@ if docker run --rm --network none --read-only "$image" serve > "$out/missing-mod
 else
   test "$?" = 2
 fi
-if docker run --rm --network none --read-only -e THREADS=3 "$image" serve > "$out/invalid-config.log" 2>&1; then
+if docker run --rm --network none --read-only -e THREADS=3 \
+  -v "$PWD/models/L37-runtime:/models:ro" "$image" serve > "$out/invalid-config.log" 2>&1; then
   printf '%s\n' 'Invalid configuration unexpectedly accepted'; exit 1
 else
   test "$?" = 2
 fi
+grep -q THREADS "$out/invalid-config.log"
 docker run --rm --network none --read-only \
   -v "$PWD/models/L37-runtime:/models:ro" "$image" check-model > "$out/model-preflight.json" 2>&1
 # Deliberately invalid decoder exists only in this disposable container's tmpfs.
@@ -35,7 +37,7 @@ else
 fi
 docker run --rm --network none --read-only --user 99:100 --entrypoint /bin/sh "$image" -c '
   id
-  if command -v python3; then exit 1; fi
+  python3 -c "import ctypes, urllib.request, ssl, hashlib"
   if command -v cargo; then exit 1; fi
   ldd /usr/local/bin/nemotron-wyoming
   test -s /usr/share/licenses/nemotron-wyoming/rust-dependencies.json

@@ -594,7 +594,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "nemotron-unified-rust-wyoming"
+name = "nemotron-unified-wyoming"
 version = "1.0.0"
 dependencies = [
  "hound",

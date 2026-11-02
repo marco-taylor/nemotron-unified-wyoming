@@ -2,11 +2,11 @@
 <CommunityApplications>
   <Profile>
     Maintained by GitHub developer marco-taylor, this repository provides
-    Nemotron Unified Rust Wyoming, a German CPU-based speech-to-text server
+    Nemotron Unified Wyoming, a German CPU-based speech-to-text server
     for Home Assistant and Unraid using the Wyoming protocol.
     Model weights are provided separately. Project documentation and support
     through GitHub Issues are available from the project page.
   </Profile>
-  <Icon>https://raw.githubusercontent.com/marco-taylor/nemotron-unified-rust-wyoming/main/assets/icons/nemotron-lowq.png</Icon>
-  <WebPage>https://github.com/marco-taylor/nemotron-unified-rust-wyoming</WebPage>
+  <Icon>https://raw.githubusercontent.com/marco-taylor/nemotron-unified-wyoming/main/assets/icons/nemotron-lowq.png</Icon>
+  <WebPage>https://github.com/marco-taylor/nemotron-unified-wyoming</WebPage>
 </CommunityApplications>

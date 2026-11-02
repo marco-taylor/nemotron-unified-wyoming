@@ -15,6 +15,11 @@
 | Modell startet, Text ist falsch/leer | Echte Aufnahme und Referenz behalten; Mikrofonpegel, VAD-Ende und Sprache prüfen. Keine Fixturetexte verwenden; Fehltranskript dokumentieren. |
 | Langsamer N100 / OOM | THREADS zunächst2; keine konkurrierenden Inferenzlasten. Dockerstats beobachten. Acht Streams brauchen mehr RAM als ein Stream; 4-GiB-Limit wurde nicht für jeden maximalen Lastfall garantiert. |
 | SIGTERM braucht länger | Aktueller nativer Aufruf wird zu Ende geführt. Stopfrist 60 s; bei wiederholter Überschreitung Logs behalten und nicht produktiv freigeben. |
-| Unraid versucht ein Image zu pullen | Regulär `ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest` verwenden und anonymen Pull prüfen. Für feste Stände einen geprüften sha-COMMIT-Tag oder Digest wählen. |
+| Unraid versucht ein Image zu pullen | Regulär `ghcr.io/marco-taylor/nemotron-unified-wyoming:latest` verwenden und anonymen Pull prüfen. Für feste Stände einen geprüften sha-COMMIT-Tag oder Digest wählen. |
 
 Serverlogs enthalten Startbereitschaft, Konfigurationsgrenzen, Verbindungsfehler und Shutdown, standardmäßig keine erkannten Texte oder Audioaufnahmen. Diagnostische Tests schreiben echte Transkripte ausdrücklich in ihre Ergebnisdatei. Nach einer fehlgeschlagenen Anfrage ist nur ein neuer vollständiger Ereigniszyklus zulässig; alte Audio-Chunks gehören nicht zu einer neuen Sitzung.
+
+
+## Phase 11: Initialisierung
+
+`no approved public source`: Der eigene exakte ONNX-Export ist noch nicht öffentlich gehostet; die vorhandenen geprüften vier Dateien gemäß docs/MODELS.md bereitstellen. Es wird kein anderer Export geladen. `insufficient free disk space`/ENOSPC: Platz auf dem persistenten Ziel prüfen, beschädigte Sicherungen und Teilstücke nicht ungeprüft löschen. EACCES/EROFS während eines nötigen Downloads: Schreibrechte des Cachepfads für PUID/PGID prüfen; keine pauschalen Eigentumsänderungen. Gültige RO-Modelle funktionieren offline. seccomp-Fehler: Initialisierung bricht sicher ab; keine zusätzlichen Capabilities oder privileged als Umgehung setzen. Neue GHCR-/GitHub-Adressen sind bis zur Freigabe nur geplante Ziele.

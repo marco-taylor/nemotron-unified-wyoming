@@ -21,11 +21,11 @@ jobs:
           python3 scripts/audit_publication.py
           python3 scripts/audit_publication.py --history
       - name: Build release image and run format, unit, TCP, interop and Clippy checks
-        run: docker build --progress=plain --target runtime -t nemotron-unified-rust-wyoming:ci .
+        run: docker build --progress=plain --target runtime -t nemotron-unified-wyoming:ci .
       - name: Verify runtime identity without downloading weights
         run: |
-          docker run --rm --network none nemotron-unified-rust-wyoming:ci --version
-          if docker run --rm --network none nemotron-unified-rust-wyoming:ci serve; then
+          docker run --rm --network none nemotron-unified-wyoming:ci --version
+          if docker run --rm --network none nemotron-unified-wyoming:ci serve; then
             echo 'Missing models unexpectedly accepted'
             exit 1
           fi

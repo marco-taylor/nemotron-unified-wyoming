@@ -7,6 +7,7 @@ import subprocess
 import sys
 
 history='--history' in sys.argv
+worktree='--worktree' in sys.argv
 entries=[]
 if history:
     commits=subprocess.check_output(['git','rev-list','--all' if '--all-refs' in sys.argv else 'HEAD']).decode().splitlines()
@@ -18,7 +19,10 @@ if history:
             if kind=='blob': entries.append((name.decode(),oid))
     entries=list(dict.fromkeys(entries))
 else:
-    names=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
+    command=['git','ls-files','-z']
+    if worktree:
+        command += ['--cached','--others','--exclude-standard']
+    names=subprocess.check_output(command).decode().split('\0')
     entries=[(name,':'+name) for name in filter(None,names)]
 patterns=[rb'github_pat_[A-Za-z0-9_]{30,}',rb'gh[pousr]_[A-Za-z0-9]{30,}',rb'hf_[A-Za-z0-9]{20,}',rb'sk-[A-Za-z0-9_-]{30,}',rb'-----BEGIN (?:OPENSSH |RSA |EC |DSA )?PRIVATE KEY-----',rb'AKIA[A-Z0-9]{16}',rb'[?&](?:X-Amz-Signature|X-Goog-Signature|token)=[A-Za-z0-9%_-]{20,}']
 icons={
@@ -39,7 +43,7 @@ for name,ref in entries:
     forbidden|=name.startswith(('models/','target/','export/reports/','benchmarks/audio/','benchmarks/results/'))
     forbidden|=path.name=='.env' or (path.name.startswith('.env.') and path.name!='.env.example')
     if forbidden: errors.append({'path':name,'reason':'forbidden file type/location'})
-    body=subprocess.check_output(['git','show',ref])
+    body=pathlib.Path(name).read_bytes() if worktree else subprocess.check_output(['git','show',ref])
     digest=hashlib.sha256(body).hexdigest()
     if digest in legacy_icon_hashes: errors.append({'path':name,'reason':'superseded NVIDIA logo in publication history'})
     approved_icon=name in icons and digest==icons[name]
@@ -48,5 +52,5 @@ for name,ref in entries:
     if b'\0' in body and not approved_icon: errors.append({'path':name,'reason':'binary file'})
     if any(re.search(p,body) for p in patterns): errors.append({'path':name,'reason':'credential/signature pattern'})
     size+=len(body);count+=1
-print(json.dumps({'scope':'reachable history' if history else 'index','files':count,'total_bytes':size,'findings':errors},indent=2))
+print(json.dumps({'scope':'reachable history' if history else 'worktree' if worktree else 'index','files':count,'total_bytes':size,'findings':errors},indent=2))
 if not count or errors: raise SystemExit(1)

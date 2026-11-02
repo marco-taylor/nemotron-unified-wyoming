@@ -8,6 +8,6 @@ fn native_library_is_actual_pr_build() {
         sha,
         sherpa_onnx::onnxruntime_version()
     );
-    assert_eq!(sha, nemotron_unified_rust_wyoming::inference::SHERPA_COMMIT);
+    assert_eq!(sha, nemotron_unified_wyoming::inference::SHERPA_COMMIT);
     assert_eq!(sherpa_onnx::version(), "2.0.1");
 }

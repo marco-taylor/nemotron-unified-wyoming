@@ -13,7 +13,7 @@ models/L37-runtime ist bereits vorhanden und benötigt keinen erneuten Download/
 | joiner.onnx | 14768802 | `7abd80133827b59dbd3b57c47242d6001607ed14acda5db36ae28d64a3de8af8` |
 | tokens.txt | 42928 | `94139a0b2134fd40664ca72260026fa8a073336bb2f062239c8ecde2c8031763` |
 
-Lizenztext und Herkunft neben den Gewichten aufbewahren. OpenMDW-1.1 ist getrennt von der MIT-Code-Lizenz; siehe ./THIRD_PARTY_NOTICES.md. Das Image enthält keine Modellgewichte. Kein Serverkommando lädt Modelle nach.
+Lizenztext und Herkunft neben den Gewichten aufbewahren. OpenMDW-1.1 ist getrennt von der MIT-Code-Lizenz; siehe ./THIRD_PARTY_NOTICES.md. Das Image enthält keine Modellgewichte. Der Container-Entrypoint prüft die vier SHA256-Werte und kann ausschließlich aus dem imagefesten Manifest nachladen. Das direkte Rust-CLI bleibt unverändert. Die exakte öffentliche Downloadquelle fehlt derzeit; fehlende oder beschädigte Dateien führen daher zu einem verständlichen Abbruch. Vorhandene gültige Dateien werden nicht verändert.
 
 L37 bedeutet links37 Encoderframes, Chunk7, rechts7 bei 80 ms Encoderframe: 2,96 s linker Kontext und 1,12 s algorithmische Chunk-/Rechtskontextlatenz. Die Aufnahme muss deshalb nicht gepolstert werden: `input_finished` und die echte Unified-Runtime erledigen EOF. Encoder teilweise QUInt8, 265 MatMulInteger-Knoten; Decoder/Joiner bleiben FP32. Kein behauptetes vollständig ganzzahliges Modell.
 
@@ -28,10 +28,19 @@ Der aktuelle CPU-Export funktioniert ohne NVIDIA-GPU. export/Dockerfile verwende
 Wenn die vorhandenen Exportabhängigkeiten und das Exportimage bereits vorhanden sind, nur in ein **neues** Ziel exportieren:
 
 ```sh
-cd /mnt/nvme/appdata/codex-workspace/nemotron-unified-rust-wyoming
+cd /mnt/nvme/appdata/codex-workspace/nemotron-unified-wyoming
 OUTPUT_DIR=/work/models/L37-reproduction sh export/run-export.sh
 ```
 
 Der Wrapper scripts/export_l37.py prüft Checkpointgröße/Hash und Exportercommit, verlangt konservativ 40 GiB freien Platz, verweigert bestehende Zielverzeichnisse und startet den tatsächlichen Exporter `scripts/nemo/nemotron-labs-unified-asr-0.6b/export_onnx.py` des gepinnten sherpa-Quellbaums mit `--left-context 37`. Netzwerk im Job ist ausgeschaltet. Der anschließende export/validate_bundle.py-Test prüft Graphen/ABI. Separater Tokenizertest: scripts/check_tokenizer.py, Bundle-/Quantisierungsprüfung: scripts/audit_int8_bundle.py. Deren tatsächliche Aufrufe/Ergebnisse sind in docs/PHASE4_RESULTS.md und export/reports dokumentiert.
 
 Nicht aus derselben Konfiguration stammende Encoder, Decoder, Joiner und Tokenizer nicht mischen. Exportdateien nicht beim Serverstart erzeugen. Für einen anderen Host zuerst den vorhandenen Runtime-Satz mit Lizenz und Herkunft kopieren, Hashes prüfen und im finalen Image einen echten Sprachtest ausführen. Änderungen am Exporter oder nativen Commit benötigen erneute Kompatibilitäts- und Spracherkennungstests.
+
+
+## Vorbereitete automatische Initialisierung (Phase 11)
+
+Vertrauensanker ist config/model-manifest.json im Image, keine aus dem Netz nachgeladene Manifestdatei und keine zusätzliche Runtime-Variable. Alle vier Größen und SHA256-Werte sind fest hinterlegt. Die URL-Felder bleiben bewusst leer, bis die exakten eigenen Exporte veröffentlicht und über HTTPS inklusive Hashprüfung bestätigt sind. Die offizielle NVIDIA-Quelle enthält das NeMo-Original, nicht diesen ONNX-Satz; Nemotron 3.5, CoreML und GGUF sind kein kompatibler Ersatz.
+
+scripts/model-init.py läuft nach dem PUID/PGID-Wechsel. Vollständige Dateien werden nur gelesen. Fehlende/defekte Dateien benötigen Schreibzugriff auf ihren persistenten Zielordner. Ein flock serialisiert Initialisierungen, danach wird unter der Sperre erneut geprüft. Download erfolgt größenbegrenzt in eine zufällige temporäre Datei im Zielverzeichnis, mit TLS-Prüfung, ausschließlich HTTPS-Weiterleitungen, Lese-Timeout und Gesamtlaufzeitgrenze. SHA256, Dateigröße und fsync gehen der atomaren Übernahme voraus. Beschädigte Originale bleiben als `.corrupt-*` erhalten. Abgebrochene, nicht geprüfte `.part-*` werden niemals als Modell verwendet; nach hartem Abbruch verbleibende Reste sind später manuell zu prüfen. Gültige Dateien werden nicht ersetzt. Symlinks und nicht reguläre Modelldateien werden abgewiesen.
+
+Netzwerkfehler, fehlende Schreibrechte, ein voller Datenträger oder eine fehlende Quelle verhindern den STT-Start. Beim nächsten Start wird erneut geprüft; bereits gültige Dateien werden weiterverwendet. Kein automatischer Eigentümerwechsel. Lizenz und Herkunft sind Bestandteil einer späteren Modellveröffentlichung; es wurde kein Modell hochgeladen. Geplanter Weg: separates versioniertes Hugging-Face-Modellrepository oder separater Artefakt-Release, mit unveränderlicher Revision, vollständiger OpenMDW-1.1-Lizenz, NVIDIA-Herkunft und Kennzeichnung der eigenen Export-/Quantisierungsänderungen. Erst nach separater Freigabe die tatsächlich erreichbaren URLs eintragen und echte leere Erstinstallation testen.

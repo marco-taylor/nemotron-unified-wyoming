@@ -1,5 +1,7 @@
 # Phase 5.2 – PUID/PGID und vollständige Variablen
 
+Hinweis zum lokalen Phase-10-Stand: Dieser Bericht beschreibt die damalige vollständige XML-Oberfläche. Alle 19 Variablen und ihre technischen Defaults gelten weiterhin; die vereinfachte Vorlage enthält jetzt acht Variableneinträge, davon sieben erweitert sichtbar. Elf technische Einträge entfallen nur aus der Vorlage. Aktuelle Bedienung und Updatehinweise: docs/UNRAID.md und docs/PHASE10_UNRAID_TEMPLATE.md. Die historischen Testergebnisse unten werden nicht rückwirkend geändert.
+
 Stand: 02.11.2026. Projekt: /mnt/nvme/appdata/codex-workspace/nemotron-unified-rust-wyoming. Relative Pfade beziehen sich auf dieses Projekt. Keine Veröffentlichung und keine Änderung des laufenden Containers nemotron-unified-stt oder anderer vorhandener Dienste.
 
 ## Bisheriger Zustand und Änderung

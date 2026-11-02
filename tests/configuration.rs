@@ -1,10 +1,10 @@
-use nemotron_unified_rust_wyoming::{
+use nemotron_unified_wyoming::{
     config::{Config, LogLevel},
     inference::SessionConfig,
     wyoming::{read_event_with_limit, write_event, Event},
 };
 use serde_json::json;
-fn config(values: &[(&str, &str)]) -> nemotron_unified_rust_wyoming::Result<Config> {
+fn config(values: &[(&str, &str)]) -> nemotron_unified_wyoming::Result<Config> {
     Config::from_values(|key| {
         values
             .iter()

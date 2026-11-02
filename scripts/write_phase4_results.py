@@ -1,7 +1,7 @@
 import datetime,json,statistics
 from pathlib import Path
 base=Path.cwd()
-host=Path('/mnt/nvme/appdata/codex-workspace/nemotron-unified-rust-wyoming')
+host=Path('/mnt/nvme/appdata/codex-workspace/nemotron-unified-wyoming')
 def link(rel,label=None):return '['+(label or rel)+']('+str(host/rel)+')'
 rows=[json.loads(l) for l in (base/'benchmarks/results/n100-l37-real-v1.jsonl').read_text().splitlines()]
 audit=json.loads((base/'export/reports/final-bundle-audit.json').read_text())
@@ -135,7 +135,7 @@ lines += ['',f'Gesamt: **{audit["total_runtime_bytes"]:,} Byte / {audit["total_r
 'Die STT-Messung läuft über die Rust-CLI; eine reale Wyoming-Netzwerk-/HA-Integration wurde nicht getestet.', '',
 'Erfolgreiches Exportimage: `nemotron-unified-export:phase4`, '
 '`sha256:22f14cdb4aeac83c6370d4c849dc6fe4757989bd5f747dc9e8f2ea0531d4a1d0`. '
-'Runtime weiterhin `nemotron-unified-rust-wyoming:phase3`. '
+'Runtime weiterhin `nemotron-unified-wyoming:phase3`. '
 'Reproduktionsdateien: '+link('export/Dockerfile')+', '+link('export/requirements.lock')+', '
 +link('export/reports/installed.freeze.txt')+', '+link('export/run-export.sh')+'. '
 'Die venv-Pakete werden beim Export read-only über den Projektpfad gefunden; das Image enthält nicht nochmals alle Pakete.', '',

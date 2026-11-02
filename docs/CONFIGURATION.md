@@ -1,6 +1,6 @@
 # Konfiguration und Wyoming
 
-Die vollständige aktuelle Variablentabelle mit Standardwerten, Validierung, Wirkung, Docker-/Unraid-Hinweisen und Backend-Grenzen steht in docs/PHASE5_2.md. Die 17 Dienstvariablen plus die zwei Entrypoint-Variablen PUID/PGID sind in ./.env.example und config/unraid-template.xml aufgeführt; Referenzliste für automatische Paritätsprüfungen: config/variables.json.
+Die vollständige Variablentabelle mit Standardwerten, Validierung, Wirkung, Docker-/Unraid-Hinweisen und Backend-Grenzen steht in docs/PHASE5_2.md. Alle 17 Dienstvariablen plus die zwei Entrypoint-Variablen PUID/PGID bleiben in ./.env.example, config/unraid.env.example, ./docker-compose.yml und config/variables.json erhalten. Die lokale Phase-10-Vorlage config/unraid-template.xml bietet davon `THREADS` normal und sieben Variablen erweitert an; elf unveränderte technische Defaults werden nicht mehr als Einträge mitgeliefert. Sie bleiben manuell ergänzbar. Sichtbarkeit, Neuinstallation und sichere Behandlung bestehender Sonderwerte: docs/UNRAID.md und docs/PHASE10_UNRAID_TEMPLATE.md. Es wurde kein Runtime-Default geändert.
 
 N100-Defaults: Sprache de, CPU, 2 ORT-Threads, 0.0.0.0:10300, maximal120s Audio, 8 Verbindungen, 320000 Byte pro Payload, native Zuführung in höchstens20-ms-Stücken. PUID/PGID=99:100 werden vor Modellzugriff angewendet; der laufende Server ist unprivilegiert. L37-Modellkontext bleibt fest. Keine native VAD-/Endpointing-Konfiguration, kein Wyoming-Transcript-Streaming.
 
@@ -9,3 +9,6 @@ Protokoll: offizielles Wyoming JSONL mit optionalen externen JSON-Daten und exak
 Headerlimit16KiB und JSON-Datenlimit64KiB sind feste Schutzgrenzen; binäre Payload ist zusätzlich durch MAX_AUDIO_CHUNK_BYTES begrenzt. Keine unbeschränkte Audiosammlung in Rust. Native Streamdaten sind durch Audiodauer und Verbindungsanzahl begrenzt; Docker-cgroup-Limit separat konfigurieren.
 
 Healthcheck nutzt dieselben Umgebungswerte für Adresse/Port, lädt keine zweite Modellkopie und prüft echtes describe/info. Er belegt geladene Modellbereitschaft und den Protokollweg, keine neue ASR pro Probe. SIGTERM/SIGINT warten auf einen laufenden nativen Aufruf. Hintergrund und bisherige technische Tests: docs/PHASE5.md.
+# Phase-11-Initialisierung
+
+Alle 19 Runtime-Variablen bleiben unverändert. Der Container prüft beim Start `serve` die vier fest gehashten L37-Dateien; MODEL_DIR und individuelle Pfadüberschreibungen gelten auch für die Prüfung. Es gibt keine neuen Download-Variablen und keine frei überschreibbare Modellquelle. `check-model`, `healthcheck`, `--help` und `--version` laden keine Modelle herunter. Vollständige vorhandene RO-Mounts funktionieren weiter. Ein zukünftiger Erstdownload benötigt einen persistenten RW-Cache und Schreibrechte für PUID/PGID. Nach Initialisierung sperrt ein zusätzlicher seccomp-Filter Dateiänderungen im STT-Prozess. Aktueller Quellenblocker und Migrationshinweise: docs/PHASE11_RENAME_AND_MODEL_DOWNLOAD.md.

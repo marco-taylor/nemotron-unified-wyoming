@@ -1,5 +1,5 @@
 #!/bin/sh
-# Identity bootstrap only: never modify model files, passwd/group or mount permissions.
+# Identity bootstrap: never change model ownership, passwd/group or mount permissions.
 set -eu
 PUID=${PUID-99}
 PGID=${PGID-100}
@@ -20,10 +20,10 @@ if [ "$(id -u)" = 0 ]; then
     # by the nonzero UID transition; no_new_privs prevents gaining them back on exec.
     exec setpriv --reuid "$PUID" --regid "$PGID" --clear-groups \
         --inh-caps=-all --ambient-caps=-all --no-new-privs \
-        /usr/local/bin/nemotron-wyoming "$@"
+        /usr/bin/python3 /usr/local/lib/nemotron/model-init.py "$@"
 fi
 if [ "$(id -u)" != "$PUID" ] || [ "$(id -g)" != "$PGID" ]; then
     echo "PUID/PGID do not match Docker --user; use matching IDs or allow bootstrap SETUID/SETGID" >&2
     exit 2
 fi
-exec setpriv --no-new-privs /usr/local/bin/nemotron-wyoming "$@"
+exec setpriv --no-new-privs /usr/bin/python3 /usr/local/lib/nemotron/model-init.py "$@"

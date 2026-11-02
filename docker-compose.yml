@@ -1,6 +1,6 @@
 services:
   nemotron-wyoming:
-    image: ${IMAGE:-ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest}
+    image: ${IMAGE:-ghcr.io/marco-taylor/nemotron-unified-wyoming:latest}
     build:
       context: .
       target: runtime
@@ -13,9 +13,9 @@ services:
       - "${PUBLISH_ADDRESS:-0.0.0.0}:${HOST_PORT:-10310}:${WYOMING_PORT:-10300}/tcp"
     volumes:
       - type: bind
-        source: ${MODEL_DIR:?Set MODEL_DIR to the prepared L37-runtime directory}
+        source: ${MODEL_DIR:?Set MODEL_DIR to the persistent L37-runtime directory}
         target: /models
-        read_only: true
+        read_only: false
         bind:
           create_host_path: false
     environment:

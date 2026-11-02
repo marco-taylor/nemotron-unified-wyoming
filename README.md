@@ -1,8 +1,8 @@
-# Nemotron Unified Rust Wyoming
+# Nemotron Unified Wyoming
 
-Deutscher Speech-to-Text-Server für Home Assistant und Unraid auf **linux/amd64 mit CPU/AVX2**. Rust verarbeitet Wyoming-TCP, Sitzungen und Audiolimits. Die sichere sherpa-onnx-Anbindung lädt NVIDIA Nemotron Labs Unified ASR 0.6B als geprüften L37-Export mit INT8-Encoder über ONNX Runtime. Python wird nur für Entwicklung und Tests benötigt.
+Deutscher Speech-to-Text-Server für Home Assistant und Unraid auf **linux/amd64 mit CPU/AVX2**. Rust verarbeitet Wyoming-TCP, Sitzungen und Audiolimits. Die sichere sherpa-onnx-Anbindung lädt NVIDIA Nemotron Labs Unified ASR 0.6B als geprüften L37-Export mit INT8-Encoder über ONNX Runtime. Die Inferenz und Wyoming-Verarbeitung bleiben in Rust/native; ein kleiner Python-Entrypoint prüft und initialisiert die Modelle vor dem Serverstart.
 
-Entwicklungsstand, **kein offizieller v1.0.0-Release**. Repository-Ziel: https://github.com/marco-taylor/nemotron-unified-rust-wyoming. Die öffentliche Historie ist bereinigt; Veröffentlichungs- und Imageprüfungen stehen in docs/PHASE6.md. Die Cargo-Paketversion 1.0.0 bezeichnet noch keinen veröffentlichten Release.
+Entwicklungsstand, **kein offizieller v1.0.0-Release**. Repository-Ziel: https://github.com/marco-taylor/nemotron-unified-wyoming. Die öffentliche Historie ist bereinigt; Veröffentlichungs- und Imageprüfungen stehen in docs/PHASE6.md. Die Cargo-Paketversion 1.0.0 bezeichnet noch keinen veröffentlichten Release.
 
 ## Funktionen und Grenzen
 
@@ -19,30 +19,30 @@ Das Image und das Git-Repository enthalten **keine Modellgewichte**. Ein zusamme
 - `models/L37-runtime/joiner.onnx`
 - `models/L37-runtime/tokens.txt`
 
-Diese Pfade sind Beispiele relativ zum Checkout. Den eigenen Hostpfad read-only nach `/models` mounten; Lizenz und Herkunft bei den Gewichten aufbewahren. Vorhandene Gewichte weiterverwenden. Beschaffung, SHA256-Werte und reproduzierbarer Export: docs/MODELS.md. Kein automatischer Download oder Export beim Serverstart. Der geprüfte Runtime-Satz umfasst 726.885.887 Byte ohne Lizenzdateien.
+Diese Pfade sind Beispiele relativ zum Checkout. Für vorhandene vollständige Modelle kann der Hostpfad weiterhin read-only nach `/models` gemountet werden. Für die vorbereitete Downloadinitialisierung wird ein persistenter RW-Mount benötigt, der für PUID/PGID beschreibbar ist; der STT-Prozess erhält danach einen Dateisystem-Schreibschutz durch seccomp. Den eigenen Hostpfad nach `/models` mounten; Lizenz und Herkunft bei den Gewichten aufbewahren. Vorhandene Gewichte weiterverwenden. Beschaffung, SHA256-Werte und reproduzierbarer Export: docs/MODELS.md. Der Container prüft vor jedem Serverstart die festen SHA256-Werte. Gültige Modelle bleiben unverändert und benötigen kein Netzwerk. Automatischer Download ist vorbereitet, aber bis zur Bereitstellung der exakten Exporte blockiert; bei fehlenden Dateien startet kein STT-Server. Kein automatischer ONNX-Export. Der geprüfte Runtime-Satz umfasst 726.885.887 Byte ohne Lizenzdateien.
 
 ## Docker installieren
 
 Voraussetzungen: Linux amd64, AVX2, Docker, vorbereitete Modelle und ungefähr 4 GiB RAM für den Container. Build und Export benötigen mehr Ressourcen.
 
-Für reguläre Installationen folgt `latest` dem erfolgreich geprüften main-Build; `dev` bleibt als kompatibler Alias erhalten:
+**Phase 11 ist ausschließlich lokal vorbereitet. Das neue Repository und die folgenden neuen Registry-Adressen sind geplante Veröffentlichungsziele und noch kein verfügbarer Installationskanal. Bestehende Installationen verwenden bis zur ausdrücklichen Migration das alte Image unverändert weiter.** Nach Freigabe soll `latest` dem geprüften main-Build folgen; `dev` bleibt als Alias vorgesehen:
 
 ```sh
-docker pull ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest
+docker pull ghcr.io/marco-taylor/nemotron-unified-wyoming:latest
 ```
 
-latest und dev wurden erfolgreich anonym gepullt und haben denselben geprüften linux/amd64-Digest; Ergebnisse: docs/LATEST.md. Für reproduzierbare Installationen den veröffentlichten `sha-COMMIT`-Tag oder Digest verwenden. Lokal bauen und Modellvorprüfung ausführen:
+Die früheren Pull-/Digest-Nachweise in docs/LATEST.md gelten für den bisherigen Projektnamen, nicht für das neue Veröffentlichungsziel. Für reproduzierbare Installationen den veröffentlichten `sha-COMMIT`-Tag oder Digest verwenden. Lokal bauen und Modellvorprüfung ausführen:
 
 ```sh
-docker build --platform linux/amd64 -t ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest .
+docker build --platform linux/amd64 -t nemotron-unified-wyoming:phase11-test .
 docker run --rm --network none --read-only \
   -v /ABSOLUTER/MODELLPFAD:/models:ro \
-  ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest check-model
+  nemotron-unified-wyoming:phase11-test check-model
 ```
 
 Der Build führt Release-Kompilierung, Formatprüfung, Rust-/Protokolltests und Clippy mit `-D warnings` aus. `check-model` prüft Dateien/Metadaten; vollständiges Graphladen und Inferenz erfordern einen Serverstart.
 
-Compose: ./.env.example nach ./.env kopieren, `MODEL_DIR` auf den vorhandenen absoluten **Hostpfad** setzen, freien `HOST_PORT` und `PUBLISH_ADDRESS` prüfen. `IMAGE=ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest` für reguläre Installation und optionalen lokalen Build verwenden.
+Compose: ./.env.example nach ./.env kopieren, `MODEL_DIR` auf den vorhandenen absoluten **Hostpfad** setzen, freien `HOST_PORT` und `PUBLISH_ADDRESS` prüfen. `IMAGE=ghcr.io/marco-taylor/nemotron-unified-wyoming:latest` für reguläre Installation und optionalen lokalen Build verwenden.
 
 ```sh
 cp .env.example .env
@@ -55,7 +55,7 @@ docker compose up -d --no-build
 
 ## Unraid und Home Assistant
 
-Unraid-Anleitung: docs/UNRAID.md. Die Vorlage config/unraid-template.xml bietet Bridge-Netz, read-only Modelle, standardmäßig Hostport 10310 → Containerport 10300 sowie alle 19 wirksamen Variablen mit deutschen Beschreibungen.
+Unraid-Anleitung: docs/UNRAID.md. Die lokal vereinfachte Vorlage config/unraid-template.xml zeigt drei Grundeinstellungen: Hostport `10310` → Containerport `10300/TCP`, das persistente L37-Modellverzeichnis mit Schreibzugriff zur Initialisierung und `THREADS=2`. Sieben weitere Variablen stehen unter „Mehr Einstellungen anzeigen“. Alle 19 Variablen bleiben technisch unterstützt; elf technische Einstellungen verwenden ihre bisherigen Defaults und lassen sich bei Bedarf manuell ergänzen. Vor einem bewussten Vorlagenwechsel bestehende Benutzervorlagen und Sonderwerte sichern. Der lokale Phase-11-Stand ist noch nicht in CA veröffentlicht; Migration und Freigabeblocker: docs/PHASE11_RENAME_AND_MODEL_DOWNLOAD.md.
 
 In Home Assistant: **Einstellungen → Geräte & Dienste → Integration hinzufügen → Wyoming Protocol**; LAN-IP des Unraid-Hosts und den veröffentlichten Hostport eintragen. In einer deutschen Assist-Testpipeline den STT-Dienst `nemotron-unified-l37-int8` auswählen. Details und Abnahme: docs/HOME_ASSISTANT.md. Bestehende Pipelines bleiben manuell verwaltet.
 

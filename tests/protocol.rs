@@ -1,5 +1,5 @@
 //! Test fixtures below validate protocol plumbing only, never ASR accuracy.
-use nemotron_unified_rust_wyoming::{
+use nemotron_unified_wyoming::{
     inference::{Backend, RecognitionSession, UnavailableBackend},
     wyoming::*,
     Result,
@@ -28,7 +28,7 @@ fn audio_and_transcription_wire_roundtrips() {
     e.payload = vec![0, 128, 255, 127, 0, 0, 10, 0];
     assert_eq!(roundtrip(&e), e);
     assert_eq!(
-        nemotron_unified_rust_wyoming::audio::decode_pcm16(&e.payload).unwrap(),
+        nemotron_unified_wyoming::audio::decode_pcm16(&e.payload).unwrap(),
         [-32768, 32767, 0, 10]
     );
 }
@@ -199,7 +199,7 @@ fn tcp_loopback_framing_without_asr() {
 }
 #[test]
 fn pcm_odd_bytes_rejected_and_sessions_reset_after_errors() {
-    assert!(nemotron_unified_rust_wyoming::audio::decode_pcm16(&[1]).is_err());
+    assert!(nemotron_unified_wyoming::audio::decode_pcm16(&[1]).is_err());
     let backend = FixtureBackend(Arc::new(Mutex::new(vec![])));
     let mut h = Handler::new(&backend);
     let mut events = input_frames();

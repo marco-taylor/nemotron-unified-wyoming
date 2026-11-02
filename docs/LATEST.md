@@ -1,3 +1,5 @@
+Historischer Prüfnachweis für den bisherigen Projektnamen. Das neue Ziel ist noch unveröffentlicht; siehe docs/PHASE11_RENAME_AND_MODEL_DOWNLOAD.md.
+
 # latest – regulärer Installationskanal
 
 Build-Quellcommit: `555e3e180abdfbbaea3fb5dad5223dec01e72d56`.

@@ -28,6 +28,7 @@ jobs:
           fetch-depth: 0
       - name: Audit sources and history before building
         run: |
+          python3 scripts/check_model_source.py
           python3 scripts/audit_publication.py
           python3 scripts/audit_publication.py --history
       - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
@@ -41,7 +42,7 @@ jobs:
           push: false
           tags: nemotron-reviewed:main
           labels: |
-            org.opencontainers.image.source=https://github.com/marco-taylor/nemotron-unified-rust-wyoming
+            org.opencontainers.image.source=https://github.com/marco-taylor/nemotron-unified-wyoming
             org.opencontainers.image.revision=${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -61,7 +62,7 @@ jobs:
         env:
           COMMIT_SHA: ${{ github.sha }}
         run: |
-          IMAGE=ghcr.io/marco-taylor/nemotron-unified-rust-wyoming
+          IMAGE=ghcr.io/marco-taylor/nemotron-unified-wyoming
           docker tag nemotron-reviewed:main "$IMAGE:latest"
           docker tag nemotron-reviewed:main "$IMAGE:dev"
           docker tag nemotron-reviewed:main "$IMAGE:sha-$COMMIT_SHA"

@@ -1,7 +1,7 @@
 #!/bin/sh
 # Creates ONLY disposable identity tests; no host ports, no permission changes on models.
 set -eu
-image=${IMAGE:-ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest}
+image=${IMAGE:-ghcr.io/marco-taylor/nemotron-unified-wyoming:latest}
 client_image=${CLIENT_IMAGE:-nemotron-unified-checks:phase5.2}
 server="nemotron-unified-puid-test-$$"
 override="nemotron-unified-puid-override-$$"

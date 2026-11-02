@@ -1,3 +1,5 @@
+Historischer Prüfnachweis für den bisherigen Projektnamen. Das neue Ziel ist noch unveröffentlicht; siehe docs/PHASE11_RENAME_AND_MODEL_DOWNLOAD.md.
+
 # Nemotron Unified – Unraid-Integrationstest
 
 Stand: 02.11.2026. Neuer, separat gestarteter Testcontainer. Kein GitHub-/GHCR-Publishing, kein Image-/Modelldownload, kein Modellkopieren, keine Änderung an Home Assistant, Moonshine, Kroko oder anderen bestehenden Containerkonfigurationen.

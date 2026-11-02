@@ -11,7 +11,7 @@ import subprocess
 import tempfile
 
 p = argparse.ArgumentParser()
-p.add_argument('--binary', default='/work/target/release/nemotron-unified-rust-wyoming')
+p.add_argument('--binary', default='/work/target/release/nemotron-unified-wyoming')
 p.add_argument('--model', required=True)
 p.add_argument('--manifest', required=True)
 p.add_argument('--output', required=True)

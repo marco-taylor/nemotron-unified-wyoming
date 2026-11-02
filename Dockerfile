@@ -33,6 +33,7 @@ FROM stamped AS development
 RUN rustup component add rustfmt clippy
 
 FROM development AS build
+ENV CARGO_NET_GIT_FETCH_WITH_CLI=true
 COPY Cargo.toml Cargo.lock ./
 COPY src ./src
 COPY tests ./tests
@@ -41,28 +42,32 @@ COPY LICENSE THIRD_PARTY_NOTICES.md ./
 COPY scripts/collect_licenses.py ./scripts/collect_licenses.py
 RUN cargo build --locked --release --features sherpa
 RUN cargo fmt --check && cargo test --locked --features sherpa && cargo clippy --locked --all-targets --features sherpa -- -D warnings
+COPY scripts/model-init.py ./scripts/model-init.py
+COPY tests/model_init_test.py ./tests/model_init_test.py
+RUN python3 -m unittest discover -s tests -p model_init_test.py -v
 
 RUN python3 scripts/collect_licenses.py
 
 FROM debian:bookworm-slim@sha256:99c0b25c46d0214d5a2091092e7908907dcaecd6a962cde0ac700acee222b6f3 AS runtime
-RUN apt-get update && apt-get install -y --no-install-recommends libstdc++6 libgomp1 ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends libstdc++6 libgomp1 ca-certificates python3 libseccomp2 && rm -rf /var/lib/apt/lists/*
 COPY --from=build /opt/sherpa/lib /opt/sherpa/lib
 COPY --from=build /work/runtime-licenses /usr/share/licenses/nemotron-wyoming
-COPY --from=build /work/target/release/nemotron-unified-rust-wyoming /usr/local/bin/nemotron-wyoming
+COPY --from=build /work/target/release/nemotron-unified-wyoming /usr/local/bin/nemotron-wyoming
 ENV LD_LIBRARY_PATH=/opt/sherpa/lib
-LABEL org.opencontainers.image.source="https://github.com/marco-taylor/nemotron-unified-rust-wyoming" \
-      net.unraid.docker.icon="https://raw.githubusercontent.com/marco-taylor/nemotron-unified-rust-wyoming/main/assets/icons/nemotron-lowq.png" \
-      org.opencontainers.image.title="Nemotron Unified Rust Wyoming" \
+LABEL org.opencontainers.image.source="https://github.com/marco-taylor/nemotron-unified-wyoming" \
+      net.unraid.docker.icon="https://raw.githubusercontent.com/marco-taylor/nemotron-unified-wyoming/main/assets/icons/nemotron-lowq.png" \
+      org.opencontainers.image.title="Nemotron Unified Wyoming" \
       org.opencontainers.image.version="1.0.0" \
       org.opencontainers.image.licenses="MIT"
 ENV MODEL_DIR=/models LANGUAGE=de THREADS=2 WYOMING_HOST=0.0.0.0 WYOMING_PORT=10300
 COPY --chmod=755 scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY scripts/model-init.py config/model-manifest.json config/model-LICENSE.md /usr/local/lib/nemotron/
 RUN mkdir -p /models && command -v setpriv
 ENV PUID=99 PGID=100
 # Root only for the UID/GID bootstrap; the server execs as PUID:PGID.
 USER 0:0
 EXPOSE 10300
 STOPSIGNAL SIGTERM
-HEALTHCHECK --interval=30s --timeout=5s --start-period=90s --retries=3 CMD ["/usr/local/bin/docker-entrypoint.sh", "healthcheck"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=35m --retries=3 CMD ["/usr/local/bin/docker-entrypoint.sh", "healthcheck"]
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["serve"]

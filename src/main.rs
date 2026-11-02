@@ -1,4 +1,4 @@
-use nemotron_unified_rust_wyoming::{benchmark, config::Config, inference, server, Error, Result};
+use nemotron_unified_wyoming::{benchmark, config::Config, inference, server, Error, Result};
 use std::path::PathBuf;
 fn main() -> std::process::ExitCode {
     match run() {
@@ -16,7 +16,7 @@ fn run() -> Result<()> {
         return Ok(());
     }
     if args.first().is_some_and(|s| s == "--help") {
-        println!("nemotron-wyoming [serve|check-model|healthcheck|benchmark] [--model DIR] [--threads 1|2|4] [--bind HOST:PORT]\nDefaults: MODEL_DIR=/models LANGUAGE=de THREADS=2 WYOMING_HOST=0.0.0.0 WYOMING_PORT=10300\nLimits: MAX_AUDIO_SECONDS=120 MAX_CONNECTIONS=8 CLIENT_TIMEOUT_SECONDS=30 MAX_AUDIO_CHUNK_BYTES=320000\nModel overrides: ENCODER_PATH DECODER_PATH JOINER_PATH TOKENS_PATH (optional, relative to MODEL_DIR or absolute)\nRuntime: STT_DEVICE=cpu INFERENCE_CHUNK_MS=20 LOG_LEVEL=info LOG_TRANSCRIPTS=false\nbenchmark diagnostic: --wav FILE --reference FILE [--paced]\nNo model download; requires separately provisioned L37 INT8 files and pinned native runtime.");
+        println!("nemotron-wyoming [serve|check-model|healthcheck|benchmark] [--model DIR] [--threads 1|2|4] [--bind HOST:PORT]\nDefaults: MODEL_DIR=/models LANGUAGE=de THREADS=2 WYOMING_HOST=0.0.0.0 WYOMING_PORT=10300\nLimits: MAX_AUDIO_SECONDS=120 MAX_CONNECTIONS=8 CLIENT_TIMEOUT_SECONDS=30 MAX_AUDIO_CHUNK_BYTES=320000\nModel overrides: ENCODER_PATH DECODER_PATH JOINER_PATH TOKENS_PATH (optional, relative to MODEL_DIR or absolute)\nRuntime: STT_DEVICE=cpu INFERENCE_CHUNK_MS=20 LOG_LEVEL=info LOG_TRANSCRIPTS=false\nbenchmark diagnostic: --wav FILE --reference FILE [--paced]\nDirect CLI requires provisioned L37 INT8 files. Container bootstrap checks pinned hashes; automatic download requires an approved source.");
         return Ok(());
     }
     let mode = args.first().map(String::as_str).unwrap_or("serve");
@@ -61,9 +61,8 @@ fn run() -> Result<()> {
         return server::healthcheck(&config.bind);
     }
     config.model.validate()?;
-    let metadata = nemotron_unified_rust_wyoming::model::validate_l37(
-        &config.model.path("encoder.int8.onnx"),
-    )?;
+    let metadata =
+        nemotron_unified_wyoming::model::validate_l37(&config.model.path("encoder.int8.onnx"))?;
     if mode == "check-model" {
         println!("{}", serde_json::to_string_pretty(&metadata)?);
         return Ok(());
