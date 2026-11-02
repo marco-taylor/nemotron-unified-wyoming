@@ -1,10 +1,10 @@
 # Unraid installieren und gespeicherte Icons umstellen
 
-Aktueller Entwicklungsstand: docs/PHASE6.md. GitHub/GHCR und Raw-Icons sind noch nicht veröffentlicht. Lokale Builds funktionieren; bestehende Container werden hier nicht automatisch aktualisiert oder neu erstellt.
+Aktueller Entwicklungsstand: docs/PHASE6.md. GitHub, GHCR-dev und beide Raw-Icons sind veröffentlicht und geprüft. Lokale Builds funktionieren; bestehende Container werden hier nicht automatisch aktualisiert oder neu erstellt.
 
 ## Image und Modelle
 
-Nach erfolgreichem GHCR-Workflow und bestätigtem anonymem Pull ist `ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:dev` der Entwicklungskanal. Einen `sha-COMMIT`-Tag oder Digest für feste Installationen verwenden. Bis dahin lokal bauen:
+Nach erfolgreichem GHCR-Workflow und bestätigtem anonymem Pull ist `ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:dev` der Entwicklungskanal. Einen `sha-COMMIT`-Tag oder Digest für feste Installationen verwenden. Alternativ lokal bauen:
 
 ```sh
 docker build --platform linux/amd64 -t nemotron-unified-rust-wyoming:dev .
@@ -40,7 +40,7 @@ Vorhandene lokale Dateien:
 | Low-Q | assets/icons/nemotron-lowq.png | 82.756 Byte | PNG, 256 × 256, transparent |
 | HQ | assets/icons/nemotron-hq.png | 1.560.271 Byte | PNG, 1254 × 1254, transparent |
 
-Die XML-Vorlage und das Image-Label `net.unraid.docker.icon` enthalten ausschließlich den geplanten Low-Q-Raw-Link:
+Die XML-Vorlage und das Image-Label `net.unraid.docker.icon` enthalten ausschließlich den öffentlichen Low-Q-Raw-Link:
 
 https://raw.githubusercontent.com/marco-taylor/nemotron-unified-rust-wyoming/main/assets/icons/nemotron-lowq.png
 
@@ -48,7 +48,7 @@ HQ bleibt eine optionale Alternative im Repository:
 
 https://raw.githubusercontent.com/marco-taylor/nemotron-unified-rust-wyoming/main/assets/icons/nemotron-hq.png
 
-Beide Dateien sind lokal vorhanden. Die Links sind bis zum erfolgreichen Push nicht öffentlich nutzbar. Die neuen Icons enthalten visuell kein NVIDIA-Logo. Die öffentliche Historie enthält ausschließlich die neuen Grafiken; die ursprüngliche Historie ist lokal gesichert. Kein HQ-Link wird als Standard in CA, Docker-Übersicht oder Template eingesetzt. Low-Q wird nicht erneut komprimiert.
+Beide Dateien sind lokal vorhanden. Beide Links sind öffentlich erreichbar und bytegenau geprüft. Die neuen Icons enthalten visuell kein NVIDIA-Logo. Die öffentliche Historie enthält ausschließlich die neuen Grafiken; die ursprüngliche Historie ist lokal gesichert. Kein HQ-Link wird als Standard in CA, Docker-Übersicht oder Template eingesetzt. Low-Q wird nicht erneut komprimiert.
 
 ## Bereits installierte Anwendung: nur Icon-Metadaten vorbereiten
 
@@ -64,6 +64,6 @@ Für den derzeit per Docker gestarteten `nemotron-unified-stt` wurde keine passe
 
 ## Compose und Home Assistant
 
-./.env.example nach ./.env kopieren, Modellpfad und freien Hostport prüfen. ./docker-compose.yml verwendet MODEL_DIR als Host-Mountquelle und `/models` im Container. Erst `docker compose config`, dann bewusst installieren. Lokal `IMAGE=nemotron-unified-rust-wyoming:dev`; GHCR erst nach bestätigter Verfügbarkeit. Nur dieser Dienst ist Bestandteil der Compose-Datei.
+./.env.example nach ./.env kopieren, Modellpfad und freien Hostport prüfen. ./docker-compose.yml verwendet MODEL_DIR als Host-Mountquelle und `/models` im Container. Erst `docker compose config`, dann bewusst installieren. Lokal `IMAGE=nemotron-unified-rust-wyoming:dev`; GHCR-dev ist öffentlich verfügbar und wurde anonym gepullt. Nur dieser Dienst ist Bestandteil der Compose-Datei.
 
 Home Assistant: Wyoming Protocol mit Unraid-LAN-IP und veröffentlichtem Hostport hinzufügen, anschließend eine deutsche Assist-Testpipeline auswählen. Details: docs/HOME_ASSISTANT.md. Internes VAD/Endpointing und Teiltranskripte fehlen; Home Assistant liefert audio-stop. Der bestehende nemotron-unified-stt bleibt bei Phase 6 unverändert.

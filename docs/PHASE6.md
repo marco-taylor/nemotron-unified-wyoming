@@ -1,30 +1,57 @@
-# Phase 6 – neue Icons und Abschluss der Veröffentlichung
+# Phase 6 – geprüfte Sicherung und erfolgreiche Veröffentlichung
 
 Stand: 02.11.2026. Hauptprojekt: /mnt/nvme/appdata/codex-workspace/nemotron-unified-rust-wyoming. Relative Pfade beziehen sich auf dieses Projekt.
 
-## Ursprünglicher Stand vor der freigegebenen Historienbereinigung
+**Abgeschlossen:** vollständige lokale Historie gesichert und wiederhergestellt geprüft, bereinigte öffentliche main-Historie veröffentlicht, beide GitHub-Actions-Läufe erfolgreich, GHCR-dev-Image anonym heruntergeladen und tatsächlich mit vorhandenen Modellen getestet. Kein offizieller v1.0.0-Release, kein Force-Push und keine Änderung produktiver Container.
 
-Die neuen Nemotron-STT-Icons sind geprüft und im aktuellen Projektstand ersetzt. Das neu angelegte öffentliche Repository https://github.com/marco-taylor/nemotron-unified-rust-wyoming ist erreichbar (HTTP 200), öffentlich und noch leer. Branch lokal main, origin unverändert git@github.com:marco-taylor/nemotron-unified-rust-wyoming.git. Der vorhandene SSH-Zugang funktioniert; die GitHub-Anbindung meldet Admin-/Push-Rechte.
+## GitHub, alter und neuer Commit
 
-**Vor dem ersten Push ist eine Historienentscheidung erforderlich.** Die lokalen Phase6-Commits enthalten die alten NVIDIA-Logo-Bilder. Ein neuer Icon-Commit allein entfernt sie nicht aus früheren öffentlich abrufbaren Commits. Gleichzeitig verlangt der Auftrag den Erhalt der bisherigen Historie und keine alten Logos im öffentlichen Projekt. Ohne ausdrückliche Entscheidung wird weder die Historie umgeschrieben noch der alte Logo-Bestand mitveröffentlicht. Eine Rückfrage dazu wurde gestellt. Kein Force-Push und kein offizieller Release.
+Repository: https://github.com/marco-taylor/nemotron-unified-rust-wyoming
 
-## Neue Icons
+| Stand | Vollständige SHA / Referenz |
+|---|---|
+| Alter lokaler Ausgangscommit | `c5da1bed933b417bcf4e59478240285eae717f05` |
+| Neue öffentliche Wurzel ohne Eltern | `e62d4dab329e49e00a041e09912133fe77999c9d` |
+| Öffentlich geprüfter Image-Quellcommit | `6e2cd9e4112e5211f0c934483e65fca21c12ae13` |
+| Ausschließlich lokaler Archivbranch | `archive/phase6-before-public` → alter Ausgangscommit |
 
-| Variante | Unveränderte Quelldatei | Aktuelle Repositorydatei | Größe | Format / Abmessungen | Transparenz |
-|---|---|---|---:|---|---|
-| HQ | icons/nemotron-stt-hq.png | assets/icons/nemotron-hq.png | 1.560.271 Byte | PNG RGBA, 1254 × 1254 | ja, Alpha bis 0 |
-| Low-Q | icons/nemotron-stt-lowq.png | assets/icons/nemotron-lowq.png | 82.756 Byte | PNG RGBA, 256 × 256 | ja, Alpha bis 0 |
+Die neue Wurzel hat exakt denselben Git-Tree wie der freigegebene Ausgangscommit: alle 114 geprüften Dateien einschließlich Quellen, Cargo-Dateien, Docker-/Unraid-Konfiguration, Dokumentation, Skripten und neuen Icons sind erhalten. Alte Logo-Bilder waren dort bereits ersetzt. Die neue Wurzel übernimmt keine Eltern und damit keine früheren Bildversionen. Die alten fünf Commits wurden nicht gelöscht.
 
-Beide Grafiken visuell geprüft: Mikrofon, Audiosignal, grüne Dekoration und „Nemotron STT“. Kein NVIDIA-Augenlogo, NVIDIA-Schriftzug oder ®-/™-Symbol erkennbar. Die Bezeichnung Nemotron dient der Modellzuordnung, ohne behauptete NVIDIA-Unterstützung. Die visuelle Prüfung ist keine pauschale Garantie über sämtliche möglichen Markenrechte; der Nutzer hat diese Ersatzgrafiken zur Veröffentlichung bereitgestellt.
+Veröffentlicht wurde ausschließlich refs/heads/main mit normalem Push. Auf GitHub gibt es keinen Archivbranch und keine Release-Tags. Ein frisch von GitHub geklontes Mirror-Repository bestand git fsck und den vollständigen HEAD-Historienaudit ohne Treffer. Die öffentliche GitHub-API findet den alten Ausgangscommit nicht („No commit found for SHA“). Nachfolgende reine Berichtsänderungen bauen auf der sauberen öffentlichen Historie auf; der Image-Quellcommit bleibt der oben genannte erfolgreich geprüfte Stand. Der abschließende Berichtscommit verwendet [skip ci], da keine Image-/Runtime-Quelle geändert wird.
 
-Bildintegrität: PNG-Signatur, sämtliche Chunk-CRCs, zlib-Dekompression, Scanline-Längen und PNG-Filterrekonstruktion erfolgreich. Kopien sind byteidentisch mit den neuen Quelldateien; diese bleiben unverändert. Low-Q liegt unter 100 KB und hat die bevorzugten 256 × 256 Pixel, daher keine erneute Komprimierung.
+## Vollständiges Backup und Wiederherstellungsprüfung
 
-SHA256 HQ: `ebc6f304d492a6523d5afebf8d21faf87f9a6d10d5ee362e924bfa2ead1a5b25`.
+Git-Bundle außerhalb des Projektverzeichnisses:
+
+`/mnt/nvme/appdata/codex-workspace/nemotron-phase6-git-backup-qzC0ZgJz/history.bundle`
+
+SHA256: `99802f1ce1ff375a16a3af5edf4e3925ecfa7fa8b12d7f7caac8f9b87bf528eb`.
+
+Vor jeder main-Umstellung sicherte git bundle create --all sämtliche damaligen Branches, Tags und alle fünf erreichbaren Commits einschließlich der Phase6-Commits. Es gab einen Branch main und keine Tags. git bundle verify bestätigte vollständige Historie ohne Voraussetzungen.
+
+Wiederhergestellt als separates Mirror-Repository:
+
+`/mnt/nvme/appdata/codex-workspace/nemotron-phase6-git-backup-qzC0ZgJz/restore-check.git`
+
+Git fsck erfolgreich. Vollständige Referenzlisten und gesamte erreichbare Commitlisten zwischen Quelle und Wiederherstellung sind exakt gleich; der wiederhergestellte main zeigt auf c5da1bed933b417bcf4e59478240285eae717f05. Referenzlisten, Commitlisten, Prüflogs und Bundle-Prüfsumme liegen im selben Backupverzeichnis. Die Sicherung wurde vor der Umstellung geprüft; zusätzlich bleibt die ursprüngliche Historie im lokalen Archivbranch erhalten. Weder Bundle noch Archivbranch wurden veröffentlicht.
+
+## Neue Icons und Low-Q-Standard
+
+| Variante | Unveränderte Quelldatei | Öffentliche Datei | Größe | Eigenschaften |
+|---|---|---|---:|---|
+| Low-Q | icons/nemotron-stt-lowq.png | assets/icons/nemotron-lowq.png | 82.756 Byte | PNG RGBA, 256 × 256, transparent |
+| HQ | icons/nemotron-stt-hq.png | assets/icons/nemotron-hq.png | 1.560.271 Byte | PNG RGBA, 1254 × 1254, transparent |
+
+Beide Grafiken visuell geprüft: Mikrofon, Audiosignal, grüne Dekoration und „Nemotron STT“. Kein NVIDIA-Augenlogo, NVIDIA-Schriftzug oder ®-/™-Symbol erkennbar. Die Produktbezeichnung dient der Modellzuordnung; keine NVIDIA-Partnerschaft oder Unterstützung wird behauptet. Neue Quelldateien vom Nutzer zur Veröffentlichung bereitgestellt; unverändert lokal erhalten.
+
+PNG-Signatur, alle Chunk-CRCs, zlib-Dekompression, Scanline-Längen und Filterrekonstruktion erfolgreich geprüft. Alpha erreicht bei beiden Bildern 0. Low-Q erfüllt unter 100 KB und mit 256 × 256 die Vorgaben; keine erneute Komprimierung. Original und Kopie stimmen jeweils bytegenau überein.
+
 SHA256 Low-Q: `242a931bd2c14dfc05a8bbbee544120ede39845a97350146a11c552c299d077b`.
+SHA256 HQ: `ebc6f304d492a6523d5afebf8d21faf87f9a6d10d5ee362e924bfa2ead1a5b25`.
 
-**Ausschließlich Low-Q** ist in config/unraid-template.xml und im Docker-Image-Label net.unraid.docker.icon als Standard eingetragen. HQ ist nur zusätzliche Grafik. Alle aktiven Iconreferenzen verwenden die bestehenden kanonischen Pfade; keine neue NVIDIA-Logo-Datei wird in den aktuellen Git-Index aufgenommen. Der lokale Originalordner icons/ bleibt ignoriert.
+**Low-Q ist der einzige Standard** in config/unraid-template.xml und im Docker-Image-Label net.unraid.docker.icon. Das heruntergeladene GHCR-Image wurde darauf geprüft. HQ bleibt ausschließlich zusätzliche Grafik.
 
-Konfigurierte Low-Q-URL, erst nach dem Push öffentlich verfügbar:
+Öffentliche Low-Q-URL:
 
 https://raw.githubusercontent.com/marco-taylor/nemotron-unified-rust-wyoming/main/assets/icons/nemotron-lowq.png
 
@@ -32,93 +59,69 @@ HQ-Alternative:
 
 https://raw.githubusercontent.com/marco-taylor/nemotron-unified-rust-wyoming/main/assets/icons/nemotron-hq.png
 
-Öffentliche Vorlage:
+Unraid-Template:
 
 https://raw.githubusercontent.com/marco-taylor/nemotron-unified-rust-wyoming/main/config/unraid-template.xml
 
-Die Migration bestehender Unraid-Iconmetadaten ist in docs/UNRAID.md beschrieben. Im Auftrag wurden keine produktiven Metadaten, Caches, Container oder Vorlagen außerhalb des Projekts verändert. CA-Aufnahme ist ein zusätzlicher Vorgang, keine automatische Folge eines GitHub-Pushs.
+Alle drei Raw-Dateien erfolgreich heruntergeladen und bytegenau mit dem lokalen Stand verglichen. Keine alten Bildpfade als aktive Standardreferenz. Migration gespeicherter Unraid-Iconmetadaten: docs/UNRAID.md. Keine bestehende Vorlage, kein DockerMan-Cache und kein Container wurden automatisch verändert. Eine Community-Applications-Aufnahme ist ein separater Vorgang und wird durch die Veröffentlichung nicht behauptet.
 
-## Erhaltene Historie und Audit
+## Sicherheits- und Lizenzprüfung
 
-Unverändert vorhandene lokale Ausgangscommits:
+scripts/audit_publication.py prüft aktuellen Index und sämtliche Blobs der veröffentlichten HEAD-Abstammung auf Secrets-/Key-/Tokenmuster, Modell-/Builddateien, verbotene Pfade, Binärdateien und übergroße Dateien. Ausschließlich die zwei exakt per SHA256 geprüften neuen PNGs sind als Bildausnahme zugelassen. Die beiden alten NVIDIA-Logo-Hashes sind ausdrücklich gesperrt. Prüfung vor Push und erneute Prüfung eines frischen öffentlichen Klons ohne Treffer. Der lokale Archivbranch ist ausdrücklich nicht Teil der öffentlichen Abstammung.
 
-- `40a5730519edc03b32b00f72936902d092cadceb` – ursprünglicher auditierter Projektstand.
-- `00dc22118d986d1c03d9d10a002661213a49e107` – Phase6-Quell-/Icon-/Identitätsänderungen mit den alten Bildern.
-- `8b2e80dc0dae772dfa4aaa5f4ab91a3c06cdf5ba` – Phase6-Berichtscommit.
+./.gitignore schließt Modelle, Audio-/Benchmark-Rohdaten, Exportumgebungen, Buildprodukte, lokale Konfigurationen und Credentials aus. Der Originalordner icons/ bleibt lokal ignoriert. ./.dockerignore ist eine Positivliste und schließt Modelle, Git, Icons sowie lokale Auth-Dateien aus dem Buildkontext aus. Kein Credential wurde in Git oder Buildargumente übernommen.
 
-Der zweite Commit enthält weiterhin die alten Logo-Blobs. scripts/audit_publication.py akzeptiert im aktuellen Index ausschließlich die beiden neuen, exakt per SHA256 geprüften PNGs. Bekannte alte Bildhashes werden ausdrücklich als Veröffentlichungsfehler erkannt, auch unter einem anderen Dateipfad. --history prüft die tatsächlich zu veröffentlichende HEAD-Abstammung; --history --all-refs prüft zusätzlich alle lokalen Sicherungs-/Nebenrefs. Eine nur lokal gesicherte alte Historie darf nicht als zusätzliche Branch/Tag mitgepusht werden.
+Runtime-Audit des tatsächlich anonym heruntergeladenen GHCR-Images: **3.548 Dateien**, keine Modellgewichte, keine unbekannten Credentialmuster. Bekannte öffentliche GnuTLS-Selbsttestschlüssel sind nur für eine exakt per SHA256 geprüfte unveränderte Debian-Bibliothek ausgenommen. Die sechs PEM-Testblöcke wurden zuvor mit dem offiziellen Quelltext unter https://github.com/gnutls/gnutls/blob/3.7.9/lib/crypto-selftests-pk.c verglichen. Keine privaten Nutzer-/Deployment-Schlüssel. Musterprüfungen sind kein vollständiger externer CVE-/Security-Audit.
 
-Secrets-/Key-/Tokenmuster, verbotene Dateitypen/-pfade, Binärdateien und übergroße Dateien werden geprüft. Ausnahme nur für die geprüften Iconkopien. Modelle, lokale Konfigurationen, Exportdownloads, Buildprodukte und rohe Prüfbelege bleiben ignoriert. ./.dockerignore ist eine Positivliste und schließt Git, Icons, Modelle und lokale Auth-Dateien aus dem Imagekontext aus.
+Eigener Code MIT, sherpa-onnx Apache-2.0, ONNX Runtime MIT, Modell getrennt OpenMDW-1.1. Keine Modellgewichte werden verteilt. Original-Lizenztexte, Herkunft und native/Rust-Abhängigkeitslizenzen bleiben erhalten; 28 Rust-Pakete ohne fehlende Lizenzangaben im bisherigen Inventar. Eigen MPL-2.0 bleibt unverändert mit nachvollziehbarem Quellort. Einzelheiten: ./THIRD_PARTY_NOTICES.md und docs/MODELS.md. Keine verbleibende bekannte Lizenz-/Icon-Veröffentlichungssperre für diesen Umfang.
 
-Keine Gewichte oder Nutzer-Zugangsdaten im bisherigen Index-/Quellhistorienaudit gefunden. Der aktuelle Historienaudit muss wegen der bekannten alten Logos fehlschlagen, bis die Historienfrage geklärt ist. Der Audit wird nicht durch pauschales Zulassen der alten PNGs umgangen.
+## Alle 19 wirksamen Variablen
 
-## Qualität und 19 Variablen
+PUID, PGID, WYOMING_HOST, WYOMING_PORT, LANGUAGE, STT_DEVICE, MODEL_DIR, ENCODER_PATH, DECODER_PATH, JOINER_PATH, TOKENS_PATH, THREADS, MAX_AUDIO_SECONDS, MAX_AUDIO_CHUNK_BYTES, MAX_CONNECTIONS, CLIENT_TIMEOUT_SECONDS, INFERENCE_CHUNK_MS, LOG_LEVEL, LOG_TRANSCRIPTS.
 
-Rust-Quellen und Serverkonfiguration werden durch diesen Iconaustausch nicht verändert. Alle **19 wirksamen Variablen** bleiben erhalten: PUID, PGID, WYOMING_HOST, WYOMING_PORT, LANGUAGE, STT_DEVICE, MODEL_DIR, ENCODER_PATH, DECODER_PATH, JOINER_PATH, TOKENS_PATH, THREADS, MAX_AUDIO_SECONDS, MAX_AUDIO_CHUNK_BYTES, MAX_CONNECTIONS, CLIENT_TIMEOUT_SECONDS, INFERENCE_CHUNK_MS, LOG_LEVEL, LOG_TRANSCRIPTS.
+17 verarbeitet Rust, PUID/PGID der tatsächliche Entrypoint. Defaults 99:100, Deutsch, CPU, zwei ORT-Threads bleiben erhalten. Referenz: config/variables.json und docs/PHASE5_2.md. Compose-Schema, XML, beide Beispieldateien und alle 19 Felder wurden lokal sowie in GitHub CI geprüft. Keine neue wirkungslose Variable.
 
-17 Variablen verarbeitet Rust, PUID/PGID der echte Entrypoint. Defaults 99:100, CPU, Deutsch und zwei ORT-Threads bleiben unverändert. Keine neuen Tuningvariablen. Read-only-Modelle, NoNewPrivs, kein automatisches chown/chmod und der unprivilegierte Serverbetrieb bleiben erhalten.
+Das veröffentlichte Image wurde tatsächlich mit PUID=99/PGID=100 und Environment-only-Override 12345:23456 geprüft. Server-PID 1 standardmäßig in allen UID-/GID-Feldern 99:100, keine Zusatzgruppen, CapPrm/CapEff/CapAmb 0, NoNewPrivs=1. Bereits unprivilegierter Start mit passenden IDs ohne Capabilities funktioniert. Ungültige IDs und widersprüchlicher Docker-user liefern verständliche Fehler. Keine automatischen chown/chmod-Aktionen; Modelle read-only.
 
-Der vorherige Phase6-Stand bestand cargo fmt --check, strenges Clippy, 33 native Rust-Tests, zusätzlich 32 Tests ohne sherpa, Release-/Docker-Build, Konfigurationsvalidierung, PUID-/PGID-Tests, Runtime-Preflight, Wyoming-Integration und sechs echte L37-Transkriptionen „Einsteigen bitte.“. Belege unter docs/evidence/phase6-current/; keine vollständige neue Sprachqualitätsabnahme behauptet.
+## GitHub Actions und Testergebnisse
 
-Für die neuen Grafiken werden Konfigurations-/Icon-Parität, Publikationsaudit und Docker-Build erneut geprüft. Der Docker-Build führt Release-Kompilierung, fmt, alle 33 Tests und strenges Clippy erneut aus. Da die Lizenzhinweise im Image aktualisiert werden, wird auch der Runtime-Preflight auf dem neuen Image wiederholt. Aktuelle Ergebnisse stehen im abschließenden lokalen Testnachweis unten. Keine Modellgewichte heruntergeladen.
+Geprüfter Quellcommit beider Läufe: `6e2cd9e4112e5211f0c934483e65fca21c12ae13`.
 
-## Lizenzen
+| Workflow | Ergebnis | Öffentlicher Lauf |
+|---|---|---|
+| Build and test | erfolgreich | https://github.com/marco-taylor/nemotron-unified-rust-wyoming/actions/runs/41456410751 |
+| GHCR development image (linux/amd64) | erfolgreich einschließlich Upload | https://github.com/marco-taylor/nemotron-unified-rust-wyoming/actions/runs/41456410692 |
 
-Eigener Code MIT; sherpa-onnx Apache-2.0; ONNX Runtime MIT; Modell getrennt OpenMDW-1.1. Vollständige Hinweise in ./THIRD_PARTY_NOTICES.md und docs/MODELS.md. Beim vorherigen Audit 28 Rust-Pakete ohne fehlende Lizenzangaben; native Original-Lizenztexte und Debian-Copyrights bleiben im Image erhalten. Keine Modellgewichte werden verteilt. Die neuen Bilder ersetzen den früheren Logo-Rechteblocker im aktuellen Dateistand; der alte Logo-Bestand in der Git-Abstammung ist noch gesondert zu lösen.
+Cloud-Ergebnisse: cargo fmt --check, cargo clippy --locked --all-targets --features sherpa -- -D warnings, **33 bestandene Rust-Tests**, Release-Build und Docker-Build erfolgreich. Darin Unit-/Konfigurations-/TCP-/offizielle Wyoming-Python-Interop-/Shutdownprüfungen. Schema-/XML-/Workflowvalidierung und Index-/Historienaudit grün. GHCR prüfte vor dem Upload Architektur, CLI und das vollständige Runtime-Dateisystem. GITHUB_TOKEN ausschließlich im Runner mit packages:write; kein Token im Repository oder Image.
 
-## GitHub Actions und GHCR
+Auf dem tatsächlich heruntergeladenen GHCR-Image erneut erfolgreich: scripts/runtime-preflight-tests.sh und scripts/test-identity.sh. CLI, fehlende Modelle, ungültige Threads/IDs, beschädigter Decoder, Zugriff-verweigert-Modellpfad, native Libraries/Lizenztexte, Identitätswechsel, Capabilities, Healthcheck und geordneter Shutdown geprüft.
 
-Quellziel: https://github.com/marco-taylor/nemotron-unified-rust-wyoming.
-Imageziel: `ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:dev`, Plattform linux/amd64. Zusätzlich geplanter reproduzierbarer `sha-COMMIT`-Tag. Kein latest-/v1.0.0-Tag und kein offizieller GitHub-Release.
+Echte lokale L37-Inferenz mit vorhandenen read-only Modellgewichten unter 99:100: dreimal **„Einsteigen bitte.“** aus der vorhandenen menschlichen CC0-Aufnahme (1,50025 s). Anfragezeiten 1,695 / 2,087 / 1,637 s unter dem isolierten 2-CPU-Testlimit. Keine neuen Gewichte oder Audiodateien heruntergeladen. Dieser kurze Test belegt die technische Kette, keine allgemeine deutsche Befehlsqualität oder neue umfassende Performanceabnahme. Frühere Nichtstandard-Konfigurationstests und 32 Tests ohne sherpa bleiben in docs/PHASE5_2.md bzw. lokalen Phase6-Belegen dokumentiert.
 
-./.github/workflows/ci.yml validiert Konfiguration/Index/Historie und baut/testet das Image. ./.github/workflows/publish-ghcr.yml prüft vor dem Push Architektur, CLI und das exportierte Runtime-Dateisystem, nutzt GITHUB_TOKEN mit packages:write und veröffentlicht dev plus Commit-Tag. Actions sind auf Commit-SHAs gepinnt. Der erste erlaubte Push nach main löst die Workflows aus. Bis zur Historienentscheidung wurde kein Push oder Cloudworkflow ausgelöst.
+Kernelwarnung über fehlende Swap-Limit-Unterstützung wie zuvor; RAM-Limit bleibt wirksam. Keine funktionale Abweichung gegenüber dem geprüften Phase5.2-/Ersatzicon-Stand festgestellt. Die Cloudbuilds sind nicht als bitidentische Offline-Rebuilds behauptet: Basis-/Cargo-/sherpa-Versionen sind gepinnt, apt und Validierungs-Transitivabhängigkeiten nicht vollständig eingefroren.
 
-Nach dem Push zu prüfen: erfolgreicher Workflow, beide Raw-PNGs mit SHA256, XML mit ausschließlich Low-Q, öffentliches linux/amd64-Manifest, anonymer tatsächlicher Image-Pull und Runtime-Audit. Ein erfolgreiches Registry-Push allein beweist noch keine öffentliche Paketsichtbarkeit.
+## GHCR-Veröffentlichung und tatsächlicher Download
 
-## Bereinigung aus der vorherigen Phase6-Ausführung
+Image: `ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:dev`.
 
-Der neue Iconauftrag löscht keine weiteren Cache-/Modell-/Forschungsdateien. Der erhaltene vollständige Lösch-Nachweis der vorherigen Ausführung steht in docs/PHASE6_CLEANUP.json: 3.394 regenerierbare Dateien, 1.074.053.320 Byte logische Größe und 447.635.456 Byte erfasste Dateiblockbelegung. Kein separat gemessener Netto-Poolgewinn; Snapshots/Kompression können abweichen. Der Release-Benchmark-Binärpfad bleibt erhalten. Keine Docker-Volumes oder Dateien anderer Projekte gelöscht.
+Unveränderlicher Quelltag: `ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:sha-6e2cd9e4112e5211f0c934483e65fca21c12ae13`.
 
-## Offene Punkte
+Beide Tags zeigen auf:
 
-1. Entscheidung zur alten Icon-Historie: öffentlich bereinigte Abstammung mit unverändert lokaler Sicherung oder ausdrückliche neue Vorgabe für die Altbilder. Keine eigenmächtige Geschichtsänderung.
-2. Danach Veröffentlichung nach main, Actions-/GHCR-Erfolg, echte Pullbarkeit und öffentliche Raw-Dateien bestätigen.
-3. Vor Version 1.0.0: repräsentative deutsche Befehle, Assist-/Satellite-Abnahme, Langzeit-/Lasttest und mögliche CA-Einreichung. Internes Endpointing/VAD, Wyoming-Teiltranskripte, alternative L37-Kontexte und GPU sind weiterhin nicht implementiert.
+`sha256:7f758ff370c45ce07b55c9d761be13b1b422643748d423cd1535d1398a1caa6d`
 
-Aktuelle Rohbelege lokal unter docs/evidence/phase6-icons/. Die unabhängigen lokalen Prüfungen sind abgeschlossen. Veröffentlichung bleibt bis zur Historienentscheidung gestoppt.
+**Beide Tags wurden anonym mit leerer Docker-Client-Konfiguration tatsächlich gepullt**, der dev-Tag einschließlich Layerdownload. Plattform linux/amd64 bestätigt. Image-ID sha256:1d7f7d5a309b2e15787a6f665f1fab8982c0d1a881d334458bdf53d39b71940d, lokale entpackte Imagegröße 116.748.638 Byte. Revisionlabel entspricht dem geprüften Quellcommit, Unraid-Iconlabel ausschließlich Low-Q. Keine Modellgewichte oder unbekannten Credentials im exportierten Image.
 
-## Abschließender lokaler Testnachweis für die Ersatzicons
+Keine bestehenden lokalen Produktiv-Image-Tags umgebogen. Kein produktiver Container neu erstellt oder neu gestartet, kein automatisches Deployment, kein GitHub-Release und kein v1.0.0-Tag.
 
-- Docker-Build linux/amd64 erfolgreich, einschließlich Release-Build, cargo fmt --check, 33 bestandenen Tests und Clippy mit -D warnings.
-- Schema-/XML-/Workflowprüfung erfolgreich; alle 19 Variablen unverändert, Low-Q alleiniger Standard.
-- Runtime-Preflight erfolgreich: CLI, fehlende Modelle, ungültige Konfiguration, beschädigter Decoder, native Libraries und Lizenztexte.
-- Runtime-Audit: 3.548 Dateien, keine Modellgewichte, keine unbekannten Credentialmuster. Exakt geprüfte öffentliche GnuTLS-Selbsttestschlüssel weiterhin separat ausgewiesen.
-- Serverbinärhash identisch zum zuvor erfolgreich auf PUID/PGID, Healthcheck und echter L37-Inferenz geprüften Stand: `4e01f66bb940238a5941272f59a7463d4275aa0f246c6114844db06881a5e260`.
-- Aktueller Git-Index: 114 Dateien, keine Secrets/Modelle/Buildartefakte oder alten Logobilder. Historienaudit meldet ausdrücklich die zwei Altbilder in der bestehenden Abstammung und sperrt den Push.
-- Alle 31 Bestandscontainer nach IDs, Konfiguration, Startzeiten und Restart-Zählern unverändert; nemotron-unified-stt weiterhin healthy. Eigene temporäre Prüfcontainer entfernt.
+## Containerkontrolle und Bereinigung
 
-Lokales Image: `nemotron-unified-rust-wyoming:phase6-new-icons`, sha256:474faf489a4d3a398a6911b93b121805c370931f7d26dd8da3b3274e65fd694c, 117.491.819 Byte, linux/amd64. Der produktive Image-Tag wurde nicht verändert. Die Quelldateien und kopierten PNGs stimmen weiterhin bytegenau überein.
+Alle **31 Bestandscontainer** wurden vor/nach Veröffentlichung und Tests nach ID, Config, HostConfig, Startzeit, Running-Status und Restart-Zähler verglichen: keine Änderungen. nemotron-unified-stt weiterhin **healthy**. Eigene eindeutig benannte Test-/Auditcontainer kontrolliert entfernt. Keine Hostports veröffentlicht, keine Docker-Volumes gelöscht und keine HA-Konfiguration geändert.
 
-GitHub Actions: 0 Läufe im noch leeren Repository. Kein Workflow gestartet, kein GHCR-Push und kein anonymer Pull eines neuen dev-Images behauptet. Der frühere Repository-Erstellungsblocker ist behoben; verbleibender Blocker ist ausschließlich die widersprüchliche Vorgabe zur alten Logo-Historie.
+In diesem Veröffentlichungsauftrag keine zusätzlichen Projektdateien oder Modelle gelöscht. Die erhaltene frühere Bereinigungsbilanz steht vollständig in docs/PHASE6_CLEANUP.json: 3.394 regenerierbare Dateien, 1.074.053.320 Byte logische Größe, 447.635.456 Byte erfasste Dateiblockbelegung. Kein separat gemessener Netto-Poolgewinn; Kompression/Snapshots können abweichen. Release-Benchmark-Binärpfad, Forschungsdaten, alte lokale Belege und Modellbestände bleiben erhalten. Keine anderen Workspace-Projekte verändert. Das ausdrücklich angeforderte Backup liegt in einem eigenen neuen Verzeichnis außerhalb des Projekts.
 
-Geprüfter lokaler Quellcommit der Ersatzicons: `ef5b6b6d548bf23f11e0d45a5dedda816bb950a1`. Ein folgender reiner Berichtscommit ergänzt diesen Nachweis. Noch kein veröffentlichter Commit und kein GHCR-Digest.
+## Noch offen vor Version 1.0.0
 
-## Freigegebene Historienbereinigung und geprüftes Backup
+Keine verbleibenden Blocker für die hier geprüfte GitHub-/GHCR-dev-Veröffentlichung. Offen bleiben repräsentative deutsche Befehlsqualität, gemeinsame Home-Assistant-/Satellite-Abnahme, Langzeit-/Lasttest und eine gesonderte CA-Einreichung. Internes Endpointing/VAD, Wyoming-Teiltranskripte, alternative L37-Kontexte und GPU-Provider sind weiterhin nicht implementiert. Offizieller v1.0.0-Release nur nach gesondertem Auftrag.
 
-Der Nutzer hat die Bereinigung ausdrücklich freigegeben. Ausgangsstand: **`c5da1bed933b417bcf4e59478240285eae717f05`**. Die ursprüngliche Historie wurde vor jeder Umstellung vollständig gesichert und nicht gelöscht.
-
-Git-Bundle außerhalb des Projektverzeichnisses:
-
-`/mnt/nvme/appdata/codex-workspace/nemotron-phase6-git-backup-qzC0ZgJz/history.bundle`
-
-SHA256 des Bundles: `99802f1ce1ff375a16a3af5edf4e3925ecfa7fa8b12d7f7caac8f9b87bf528eb`.
-
-`git bundle create --all` sicherte sämtliche damaligen Branch-/Tag-Referenzen und alle fünf erreichbaren Commits. Es gab einen Branch main und keine Tags. `git bundle verify` bestätigt vollständige Historie ohne Voraussetzungen. Wiederherstellung als separates Mirror-Repository unter `/mnt/nvme/appdata/codex-workspace/nemotron-phase6-git-backup-qzC0ZgJz/restore-check.git`; `git fsck --full` erfolgreich. Referenzliste und gesamte erreichbare Commitliste zwischen Quelle und Wiederherstellung sind exakt gleich. Der wiederhergestellte main zeigt auf den angegebenen Ausgangscommit. Prüflogs, Referenzlisten und Bundle-Prüfsumme liegen daneben im Backupverzeichnis.
-
-Die alte Historie bleibt zusätzlich im lokalen Branch `archive/phase6-before-public` erhalten. Dieser Branch und seine Objekte werden nicht veröffentlicht. Es werden ausschließlich refs/heads/main und dessen saubere Abstammung gepusht, niemals --all oder --mirror.
-
-Neue öffentliche Wurzel: **`e62d4dab329e49e00a041e09912133fe77999c9d`**. Sie hat keine Eltern und exakt denselben Git-Tree wie c5da1bed933b417bcf4e59478240285eae717f05. Dadurch bleiben alle 114 geprüften Projektdateien, Rust-/Docker-Konfigurationen, alle 19 Variablen, Dokumentation und beide neuen Icons erhalten. Nachfolgende Commits aktualisieren ausschließlich Dokumentationsstatus und Prüfergebnisse.
-
-Index- und HEAD-Historienaudit der neuen Wurzel: jeweils 114 Dateien / 2.815.158 Byte, keine Secrets, Gewichte, Buildartefakte oder alten NVIDIA-Logo-Bytes. Die beiden bekannten alten Bildhashes sind im Auditor ausdrücklich gesperrt. Die lokale Archivhistorie enthält diese Bilder weiterhin und gehört ausdrücklich nicht zum Veröffentlichungsumfang. Kein Force-Push und keine Löschung alter Git-Objekte.
-
-Der frühere Historienblocker ist damit behoben. Der erste Push, GitHub-Actions-Läufe, öffentliches GHCR-dev-Image und Raw-URLs werden im nächsten Schritt tatsächlich geprüft. Statusabschnitte oberhalb dieser Ergänzung beschreiben den historischen Zustand vor der Freigabe und sind keine aktuelle Veröffentlichungssperre.
+Lokale, bewusst nicht veröffentlichte Rohbelege: docs/evidence/phase6-publication/ (Cloudlogs, frischer öffentlicher Historienaudit, Raw-Dateivergleich, anonyme Pulls, Imageaudit, Identitäts-/Inferenztests und Containervergleich). Frühere Belege bleiben unter docs/evidence/phase6-icons/ und docs/evidence/phase6-current/ erhalten. Die Backup-Wiederherstellungsbelege liegen neben dem Git-Bundle.
