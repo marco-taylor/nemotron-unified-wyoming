@@ -31,7 +31,7 @@ Für reguläre Installationen folgt `latest` dem erfolgreich geprüften main-Bui
 docker pull ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest
 ```
 
-Verfügbarkeit und anonymer Pull von latest werden nach dem zugehörigen Workflow geprüft; Ergebnisse: docs/LATEST.md. Für reproduzierbare Installationen den veröffentlichten `sha-COMMIT`-Tag oder Digest verwenden. Lokal bauen und Modellvorprüfung ausführen:
+latest und dev wurden erfolgreich anonym gepullt und haben denselben geprüften linux/amd64-Digest; Ergebnisse: docs/LATEST.md. Für reproduzierbare Installationen den veröffentlichten `sha-COMMIT`-Tag oder Digest verwenden. Lokal bauen und Modellvorprüfung ausführen:
 
 ```sh
 docker build --platform linux/amd64 -t ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest .

@@ -4,6 +4,8 @@ Stand: 02.11.2026. Hauptprojekt: /mnt/nvme/appdata/codex-workspace/nemotron-unif
 
 **Abgeschlossen:** vollständige lokale Historie gesichert und wiederhergestellt geprüft, bereinigte öffentliche main-Historie veröffentlicht, beide GitHub-Actions-Läufe erfolgreich, GHCR-dev-Image anonym heruntergeladen und tatsächlich mit vorhandenen Modellen getestet. Kein offizieller v1.0.0-Release, kein Force-Push und keine Änderung produktiver Container.
 
+Aktueller regulärer Installationskanal ist inzwischen `ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest`; dev bleibt erhalten. Die nachfolgende Phase6-Bilanz dokumentiert die ursprüngliche dev-Veröffentlichung. Aktuelle Tag-/Digest-/Integrationsergebnisse: docs/LATEST.md.
+
 ## GitHub, alter und neuer Commit
 
 Repository: https://github.com/marco-taylor/nemotron-unified-rust-wyoming
