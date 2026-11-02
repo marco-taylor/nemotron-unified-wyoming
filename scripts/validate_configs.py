@@ -13,7 +13,7 @@ print('Compose: passed official compose-spec JSON schema; sha256='+hashlib.sha25
 root=ET.parse('config/unraid-template.xml').getroot()
 assert root.tag=='Container' and root.attrib['version']=='2'
 assert root.findtext('Privileged')=='false'
-assert root.findtext('Repository')=='ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:dev'
+assert root.findtext('Repository')=='ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest'
 assert any(c.attrib.get('Target')=='/models' and c.attrib.get('Mode')=='ro' for c in root.findall('Config'))
 assert root.findtext('Network')=='bridge'
 assert root.findtext('Icon')=='https://raw.githubusercontent.com/marco-taylor/nemotron-unified-rust-wyoming/main/assets/icons/nemotron-lowq.png'
@@ -31,11 +31,20 @@ for path in Path('.github/workflows').glob('*.yml'):
         assert workflow['jobs']['build-and-publish']['permissions']['packages']=='write'
         assert 'linux/amd64' in path.read_text()
         assert 'v1.0.0' not in path.read_text()
+        publish=workflow['jobs']['build-and-publish']['steps'][-1]['run']
+        for tag in ['latest','dev','sha-$COMMIT_SHA']:
+            assert 'docker tag nemotron-reviewed:main "$IMAGE:'+tag+'"' in publish
+            assert 'docker push "$IMAGE:'+tag+'"' in publish
+        assert publish.index('docker push "$IMAGE:latest"') > publish.index('docker push "$IMAGE:dev"')
     print(str(path)+': YAML parsed and release safeguards checked; not remotely executed')
 
 rows=json.loads(Path("config/variables.json").read_text())
 names={row[0] for row in rows}
 assert len(names)==19
+regular_image='ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest'
+assert compose['services']['nemotron-wyoming']['image']=='${IMAGE:-'+regular_image+'}'
+for example in ['.env.example','config/unraid.env.example']:
+    assert 'IMAGE='+regular_image in Path(example).read_text()
 xml_variables={c.attrib["Target"] for c in root.findall("Config") if c.attrib.get("Type")=="Variable"}
 assert xml_variables==names
 assert set(compose["services"]["nemotron-wyoming"]["environment"])==names

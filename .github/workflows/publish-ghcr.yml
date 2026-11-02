@@ -1,11 +1,11 @@
-name: GHCR development image (linux/amd64)
+name: GHCR main image (latest and dev, linux/amd64)
 on:
   push:
     branches: [main]
   workflow_dispatch:
     inputs:
       publish:
-        description: 'Publish the main development image (no official release)'
+        description: 'Publish latest and dev from main (no official release)'
         type: boolean
         required: true
         default: false
@@ -57,12 +57,14 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Publish development and exact commit tags
+      - name: Publish latest, compatibility dev and exact commit tags
         env:
           COMMIT_SHA: ${{ github.sha }}
         run: |
           IMAGE=ghcr.io/marco-taylor/nemotron-unified-rust-wyoming
+          docker tag nemotron-reviewed:main "$IMAGE:latest"
           docker tag nemotron-reviewed:main "$IMAGE:dev"
           docker tag nemotron-reviewed:main "$IMAGE:sha-$COMMIT_SHA"
           docker push "$IMAGE:sha-$COMMIT_SHA"
           docker push "$IMAGE:dev"
+          docker push "$IMAGE:latest"

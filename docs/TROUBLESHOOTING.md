@@ -15,6 +15,6 @@
 | Modell startet, Text ist falsch/leer | Echte Aufnahme und Referenz behalten; Mikrofonpegel, VAD-Ende und Sprache prüfen. Keine Fixturetexte verwenden; Fehltranskript dokumentieren. |
 | Langsamer N100 / OOM | THREADS zunächst2; keine konkurrierenden Inferenzlasten. Dockerstats beobachten. Acht Streams brauchen mehr RAM als ein Stream; 4-GiB-Limit wurde nicht für jeden maximalen Lastfall garantiert. |
 | SIGTERM braucht länger | Aktueller nativer Aufruf wird zu Ende geführt. Stopfrist 60 s; bei wiederholter Überschreitung Logs behalten und nicht produktiv freigeben. |
-| Unraid versucht ein Image zu pullen | Image ist bisher nur lokal vorhanden. Lokal exakt `nemotron-unified-rust-wyoming:1.0.0` bauen. Kein veröffentlichtes GHCR-Tag behauptet. |
+| Unraid versucht ein Image zu pullen | Regulär `ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest` verwenden und anonymen Pull prüfen. Für feste Stände einen geprüften sha-COMMIT-Tag oder Digest wählen. |
 
 Serverlogs enthalten Startbereitschaft, Konfigurationsgrenzen, Verbindungsfehler und Shutdown, standardmäßig keine erkannten Texte oder Audioaufnahmen. Diagnostische Tests schreiben echte Transkripte ausdrücklich in ihre Ergebnisdatei. Nach einer fehlgeschlagenen Anfrage ist nur ein neuer vollständiger Ereigniszyklus zulässig; alte Audio-Chunks gehören nicht zu einer neuen Sitzung.

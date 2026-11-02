@@ -1,7 +1,7 @@
 #!/bin/sh
 # Opt-in, isolated real model test. Creates only its own disposable containers, no host ports.
 set -eu
-image=${IMAGE:-nemotron-unified-rust-wyoming:phase5.1}
+image=${IMAGE:-ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest}
 client_image=${CLIENT_IMAGE:-nemotron-unified-checks:phase5.2}
 server="nemotron-unified-phase51-test-$$"
 client="nemotron-unified-phase51-signal-client-$$"

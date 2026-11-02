@@ -1,13 +1,13 @@
 # Unraid installieren und gespeicherte Icons umstellen
 
-Aktueller Entwicklungsstand: docs/PHASE6.md. GitHub, GHCR-dev und beide Raw-Icons sind veröffentlicht und geprüft. Lokale Builds funktionieren; bestehende Container werden hier nicht automatisch aktualisiert oder neu erstellt.
+Aktueller Entwicklungsstand: docs/PHASE6.md. Regulärer Imagekanal ist latest; dev bleibt zur Kompatibilität erhalten. Tagprüfung: docs/LATEST.md. Lokale Builds funktionieren; bestehende Container werden hier nicht automatisch aktualisiert oder neu erstellt.
 
 ## Image und Modelle
 
-Nach erfolgreichem GHCR-Workflow und bestätigtem anonymem Pull ist `ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:dev` der Entwicklungskanal. Einen `sha-COMMIT`-Tag oder Digest für feste Installationen verwenden. Alternativ lokal bauen:
+Nach erfolgreichem GHCR-Workflow und bestätigtem anonymem Pull ist `ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest` der reguläre Installationskanal. Einen `sha-COMMIT`-Tag oder Digest für feste Installationen verwenden. Alternativ lokal bauen:
 
 ```sh
-docker build --platform linux/amd64 -t nemotron-unified-rust-wyoming:dev .
+docker build --platform linux/amd64 -t ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest .
 ```
 
 Zusammengehörige Modellgewichte gemäß docs/MODELS.md separat bereitstellen und read-only nach `/models` mounten. Standard PUID=99 und PGID=100 muss alle Elternverzeichnisse betreten und Dateien lesen können. Der Entrypoint ändert keine Eigentümer oder Rechte. Keine pauschalen chown/chmod-Aktionen durchführen.
@@ -16,7 +16,7 @@ Zusammengehörige Modellgewichte gemäß docs/MODELS.md separat bereitstellen un
 
 config/unraid-template.xml ist die Projektvorlage. Bei einer neuen manuellen Installation unter einem freien Namen nach `/boot/config/plugins/dockerMan/templates-user/my-nemotron-unified-rust-wyoming.xml` kopieren und im Docker-Tab „Add Container“ auswählen. Vorhandene Benutzervorlagen vorher sichern und nicht überschreiben. Eine XML-Prüfung oder GitHub-Veröffentlichung bedeutet noch keine Aufnahme in Community Applications.
 
-Repository für den lokalen Build auf `nemotron-unified-rust-wyoming:dev` setzen. Den voreingetragenen GHCR-Kanal erst nach erfolgreicher Veröffentlichung nutzen. Bridge, Privileged=false, Modellmount read-only; freier Hostport standardmäßig 10310 auf Containerport 10300/TCP. Keine GPU, kein Docker-Socket und kein Hostnetz erforderlich.
+Repository für den lokalen Build auf `ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest` setzen. Den voreingetragenen GHCR-Kanal erst nach erfolgreicher Veröffentlichung nutzen. Bridge, Privileged=false, Modellmount read-only; freier Hostport standardmäßig 10310 auf Containerport 10300/TCP. Keine GPU, kein Docker-Socket und kein Hostnetz erforderlich.
 
 Alle 19 Variablen sind mit deutschen Beschreibungen sichtbar. Referenz: docs/PHASE5_2.md und config/variables.json. Bei Änderung von WYOMING_PORT auch den Target-Port der Vorlage ändern; WYOMING_HOST im normalen Bridge-Betrieb auf 0.0.0.0 belassen. Modell-Einzelpfade sind Containerpfade. Nur CPU und THREADS=1/2/4 unterstützt.
 
@@ -64,6 +64,6 @@ Für den derzeit per Docker gestarteten `nemotron-unified-stt` wurde keine passe
 
 ## Compose und Home Assistant
 
-./.env.example nach ./.env kopieren, Modellpfad und freien Hostport prüfen. ./docker-compose.yml verwendet MODEL_DIR als Host-Mountquelle und `/models` im Container. Erst `docker compose config`, dann bewusst installieren. Lokal `IMAGE=nemotron-unified-rust-wyoming:dev`; GHCR-dev ist öffentlich verfügbar und wurde anonym gepullt. Nur dieser Dienst ist Bestandteil der Compose-Datei.
+./.env.example nach ./.env kopieren, Modellpfad und freien Hostport prüfen. ./docker-compose.yml verwendet MODEL_DIR als Host-Mountquelle und `/models` im Container. Erst `docker compose config`, dann bewusst installieren. Lokal `IMAGE=ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest`. Der reguläre GHCR-Kanal ist latest; Ergebnisse des anonymen Pulls stehen in docs/LATEST.md. Nur dieser Dienst ist Bestandteil der Compose-Datei.
 
 Home Assistant: Wyoming Protocol mit Unraid-LAN-IP und veröffentlichtem Hostport hinzufügen, anschließend eine deutsche Assist-Testpipeline auswählen. Details: docs/HOME_ASSISTANT.md. Internes VAD/Endpointing und Teiltranskripte fehlen; Home Assistant liefert audio-stop. Der bestehende nemotron-unified-stt bleibt bei Phase 6 unverändert.

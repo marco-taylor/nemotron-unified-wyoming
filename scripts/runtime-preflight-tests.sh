@@ -1,7 +1,7 @@
 #!/bin/sh
 # Opt-in local image checks; no listening service succeeds, no downloads or host ports.
 set -eu
-image=${IMAGE:-nemotron-unified-rust-wyoming:1.0.0}
+image=${IMAGE:-ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest}
 test_results_dir=${TEST_RESULTS_DIR:-docs/evidence/phase5}
 out="$PWD/$test_results_dir"
 mkdir -p "$out"

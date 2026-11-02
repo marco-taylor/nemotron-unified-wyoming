@@ -1,6 +1,6 @@
 services:
   nemotron-wyoming:
-    image: ${IMAGE:-nemotron-unified-rust-wyoming:dev}
+    image: ${IMAGE:-ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest}
     build:
       context: .
       target: runtime

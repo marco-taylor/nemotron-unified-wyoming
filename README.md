@@ -25,32 +25,33 @@ Diese Pfade sind Beispiele relativ zum Checkout. Den eigenen Hostpfad read-only 
 
 Voraussetzungen: Linux amd64, AVX2, Docker, vorbereitete Modelle und ungefähr 4 GiB RAM für den Container. Build und Export benötigen mehr Ressourcen.
 
-Das veröffentlichte Entwicklungsimage ist öffentlich verfügbar:
+Für reguläre Installationen folgt `latest` dem erfolgreich geprüften main-Build; `dev` bleibt als kompatibler Alias erhalten:
 
 ```sh
-docker pull ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:dev
+docker pull ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest
 ```
 
-Dieser Pull wurde am 02.11.2026 mit leerer Docker-Client-Konfiguration erfolgreich anonym geprüft. Für reproduzierbare Installationen den veröffentlichten `sha-COMMIT`-Tag oder Digest verwenden. Lokal bauen und Modellvorprüfung ausführen:
+Verfügbarkeit und anonymer Pull von latest werden nach dem zugehörigen Workflow geprüft; Ergebnisse: docs/LATEST.md. Für reproduzierbare Installationen den veröffentlichten `sha-COMMIT`-Tag oder Digest verwenden. Lokal bauen und Modellvorprüfung ausführen:
 
 ```sh
-docker build --platform linux/amd64 -t nemotron-unified-rust-wyoming:dev .
+docker build --platform linux/amd64 -t ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest .
 docker run --rm --network none --read-only \
   -v /ABSOLUTER/MODELLPFAD:/models:ro \
-  nemotron-unified-rust-wyoming:dev check-model
+  ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest check-model
 ```
 
 Der Build führt Release-Kompilierung, Formatprüfung, Rust-/Protokolltests und Clippy mit `-D warnings` aus. `check-model` prüft Dateien/Metadaten; vollständiges Graphladen und Inferenz erfordern einen Serverstart.
 
-Compose: ./.env.example nach ./.env kopieren, `MODEL_DIR` auf den vorhandenen absoluten **Hostpfad** setzen, freien `HOST_PORT` und `PUBLISH_ADDRESS` prüfen. `IMAGE=nemotron-unified-rust-wyoming:dev` für den lokalen Build oder nach Veröffentlichung den GHCR-Tag setzen.
+Compose: ./.env.example nach ./.env kopieren, `MODEL_DIR` auf den vorhandenen absoluten **Hostpfad** setzen, freien `HOST_PORT` und `PUBLISH_ADDRESS` prüfen. `IMAGE=ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest` für reguläre Installation und optionalen lokalen Build verwenden.
 
 ```sh
 cp .env.example .env
 docker compose config
-docker compose up -d --build
+docker compose pull
+docker compose up -d --no-build
 ```
 
-./docker-compose.yml enthält nur diesen Dienst. Bestehende Dienste werden durch die Anleitung nicht automatisch migriert. Für Registry-Nutzung nach erfolgreichem Pull `docker compose up -d --no-build` verwenden.
+./docker-compose.yml enthält nur diesen Dienst. Bestehende Dienste werden durch die Anleitung nicht automatisch migriert. Für einen bewusst lokalen Build stattdessen `docker compose build` ausführen.
 
 ## Unraid und Home Assistant
 

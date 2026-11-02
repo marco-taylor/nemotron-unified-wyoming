@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Container version="2">
   <Name>nemotron-unified-rust-wyoming</Name>
-  <Repository>ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:dev</Repository>
+  <Repository>ghcr.io/marco-taylor/nemotron-unified-rust-wyoming:latest</Repository>
   <Registry>https://ghcr.io/marco-taylor/nemotron-unified-rust-wyoming</Registry>
   <Network>bridge</Network>
   <Privileged>false</Privileged>
   <Support>https://github.com/marco-taylor/nemotron-unified-rust-wyoming/issues</Support>
   <Project>https://github.com/marco-taylor/nemotron-unified-rust-wyoming</Project>
-  <Overview>Deutsche CPU-Spracherkennung mit NVIDIA Nemotron Labs Unified ASR 0.6B L37 INT8 über Wyoming. Modellgewichte separat bereitstellen. Der main-Imagekanal ist ein Entwicklungsstand, kein offizieller v1.0.0-Release. Keine automatischen Modelldownloads.</Overview>
+  <Overview>Deutsche CPU-Spracherkennung mit NVIDIA Nemotron Labs Unified ASR 0.6B L37 INT8 über Wyoming. Modellgewichte separat bereitstellen. Der latest-Imagekanal folgt dem geprüften main-Stand, kein offizieller v1.0.0-Release. Keine automatischen Modelldownloads.</Overview>
   <Category>HomeAutomation:</Category>
   <WebUI/>
   <Icon>https://raw.githubusercontent.com/marco-taylor/nemotron-unified-rust-wyoming/main/assets/icons/nemotron-lowq.png</Icon>
