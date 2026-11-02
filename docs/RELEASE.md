@@ -1,6 +1,6 @@
 # Veröffentlichung und spätere v1.0.0-Freigabe
 
-**Aktuelle Phase-11-Sperre:** Alle neuen Namen/Adressen sind lokal vorbereitet. Keine frühere Freigabe gilt als Erlaubnis für diese Veröffentlichung. scripts/check_model_source.py blockiert den neuen Publikationsworkflow, solange die exakten eigenen L37-Exporte keine genehmigten HTTPS-Quellen haben. Erst Modellbereitstellung mit Lizenz-/Herkunftshinweisen freigeben, leere Erstinstallation testen, dann GitHub-Umbenennung, Push, GHCR und CA einzeln nach Freigabe durchführen. Historische Statusangaben unten betreffen den bisherigen Projektnamen.
+**Aktuell Phase 12:** Veröffentlichung ist ausdrücklich freigegeben. Der unveränderliche Modell-Release `models-l37-v1.0.0` ist öffentlich und alle Assets wurden anonym gegen lokale Größen/SHA256 geprüft. scripts/check_model_source.py prüft die festen URLs vor der Image-Veröffentlichung. Der GHCR-Workflow baut und prüft Rust/Downloader sowie das Image-Dateisystem und testet danach echte Modellinitialisierung aus einem leeren Cache bis healthy, bevor Tags gepusht werden. Aktueller Status, Digests und CA-Bestätigung: docs/PHASE12_PUBLICATION.md. Historische Phase-6-Angaben unten sind kein Nachweis für das neue Image.
 
 Quellrepository: https://github.com/marco-taylor/nemotron-unified-wyoming
 GHCR: ghcr.io/marco-taylor/nemotron-unified-wyoming

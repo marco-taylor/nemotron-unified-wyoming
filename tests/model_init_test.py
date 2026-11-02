@@ -3,6 +3,7 @@ import contextlib
 import hashlib
 import importlib.util
 import io
+import fcntl
 import http.server
 import json
 import multiprocessing
@@ -105,6 +106,59 @@ class BootstrapTests(unittest.TestCase):
         self.assertFalse((self.root / "encoder.int8.onnx").exists())
         self.ensure()
         self.assertTrue(init.valid(self.root / "encoder.int8.onnx", ENTRIES[0]))
+        self.assertFalse(list(self.root.glob(".*.part-*")))
+
+    def test_complete_cache_cleans_orphans_without_redownload(self):
+        self.ensure()
+        self.calls.clear()
+        path = self.root / ".encoder.int8.onnx.part-abcdefgh"
+        path.write_bytes(b"incomplete")
+        original = self.root / "encoder.int8.onnx"
+        inode = original.stat().st_ino
+        self.ensure()
+        self.assertFalse(path.exists())
+        self.assertEqual(self.calls, [])
+        self.assertEqual(inode, original.stat().st_ino)
+
+    def test_cleanup_preserves_symlinks_hardlinks_and_unknown_files(self):
+        self.ensure()
+        symlink = self.root / ".encoder.int8.onnx.part-abcdefgh"
+        symlink.symlink_to(self.root / "encoder.int8.onnx")
+        hardlink = self.root / ".joiner.onnx.part-abcdefgh"
+        os.link(self.root / "joiner.onnx", hardlink)
+        unknown = self.root / ".tokens.txt.part-unknown-user-file"
+        unknown.write_bytes(b"retain")
+        self.calls.clear()
+        self.ensure()
+        self.assertTrue(symlink.is_symlink())
+        self.assertTrue(hardlink.exists())
+        self.assertEqual(unknown.read_bytes(), b"retain")
+        self.assertEqual(self.calls, [])
+
+    def test_cleanup_skips_active_download_tempfile(self):
+        self.ensure()
+        path = self.root / ".decoder.onnx.part-abcdefgh"
+        ready = multiprocessing.Event()
+        release = multiprocessing.Event()
+        def worker():
+            with path.open("wb") as stream:
+                fcntl.flock(stream, fcntl.LOCK_EX)
+                stream.write(b"active")
+                stream.flush()
+                ready.set()
+                release.wait(10)
+        process = multiprocessing.Process(target=worker)
+        process.start()
+        try:
+            self.assertTrue(ready.wait(5))
+            self.ensure()
+            self.assertTrue(path.exists())
+        finally:
+            release.set()
+            process.join(5)
+        self.assertEqual(process.exitcode, 0)
+        self.ensure()
+        self.assertFalse(path.exists())
 
     def test_concurrent_initializers_only_one_download_each(self):
         counter = multiprocessing.Value("i", 0)

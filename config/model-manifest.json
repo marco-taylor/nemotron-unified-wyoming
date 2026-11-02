@@ -4,15 +4,39 @@
   "source_checkpoint_sha256": "1718cc1b44fb8597b2356328d706a8d89f31c389ca6f2256c2e3f743c0246936",
   "upstream_url": "https://huggingface.co/nvidia/nemotron-labs-unified-asr-0.6b",
   "license_url": "https://huggingface.co/nvidia/nemotron-labs-unified-asr-0.6b/blob/023ce907267a09a308a5cb69239447cb3d0c1597/LICENSE.md",
-  "export_context": {"left":37,"center":7,"right":7},
+  "export_context": {
+    "left": 37,
+    "center": 7,
+    "right": 7
+  },
   "quantization": "encoder partially QUInt8 (265 MatMulInteger); decoder/joiner FP32",
   "sherpa_revision": "31ba0e438f8065189a8e5589d84dfd7faf516d3d",
-  "public_source_status": "blocked: exact custom export not publicly hosted; no substitute allowed",
+  "public_source_status": "Verified public immutable GitHub Release models-l37-v1.0.0; anonymous sizes and SHA256 confirmed",
   "license": "OpenMDW-1.1",
   "files": [
-    {"name":"encoder.int8.onnx","size":675328677,"sha256":"8e1b140b85900dcaede7e5fc05c1adfd48d4a0585e3b55ec2a10cded7042c96d","url":null},
-    {"name":"decoder.onnx","size":36745480,"sha256":"e5281215d86116e425191324830090922ec7732a34b1f5203d3b5a3564a20d97","url":null},
-    {"name":"joiner.onnx","size":14768802,"sha256":"7abd80133827b59dbd3b57c47242d6001607ed14acda5db36ae28d64a3de8af8","url":null},
-    {"name":"tokens.txt","size":42928,"sha256":"94139a0b2134fd40664ca72260026fa8a073336bb2f062239c8ecde2c8031763","url":null}
+    {
+      "name": "encoder.int8.onnx",
+      "size": 675328677,
+      "sha256": "8e1b140b85900dcaede7e5fc05c1adfd48d4a0585e3b55ec2a10cded7042c96d",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/encoder.int8.onnx"
+    },
+    {
+      "name": "decoder.onnx",
+      "size": 36745480,
+      "sha256": "e5281215d86116e425191324830090922ec7732a34b1f5203d3b5a3564a20d97",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/decoder.onnx"
+    },
+    {
+      "name": "joiner.onnx",
+      "size": 14768802,
+      "sha256": "7abd80133827b59dbd3b57c47242d6001607ed14acda5db36ae28d64a3de8af8",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/joiner.onnx"
+    },
+    {
+      "name": "tokens.txt",
+      "size": 42928,
+      "sha256": "94139a0b2134fd40664ca72260026fa8a073336bb2f062239c8ecde2c8031763",
+      "url": "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/models-l37-v1.0.0/tokens.txt"
+    }
   ]
 }

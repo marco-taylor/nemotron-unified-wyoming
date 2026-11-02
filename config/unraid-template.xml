@@ -7,7 +7,8 @@
   <Privileged>false</Privileged>
   <Support>https://github.com/marco-taylor/nemotron-unified-wyoming/issues</Support>
   <Project>https://github.com/marco-taylor/nemotron-unified-wyoming</Project>
-  <Overview>Deutsche CPU-Spracherkennung mit NVIDIA Nemotron Labs Unified ASR 0.6B L37 INT8 über Wyoming. Geprüfte Modelle werden wiederverwendet; fehlende oder beschädigte Dateien werden nach Freigabe einer verifizierten Downloadquelle beim ersten Start geladen (kann länger dauern). Aktuell ist die Quelle für den exakten Export noch nicht freigegeben; daher Modelle vorerst separat bereitstellen. Der latest-Imagekanal folgt dem geprüften main-Stand, kein offizieller v1.0.0-Release. Lokaler Entwicklungsstand, noch nicht veröffentlicht.</Overview>
+  <TemplateURL>https://raw.githubusercontent.com/marco-taylor/nemotron-unified-wyoming/main/config/unraid-template.xml</TemplateURL>
+  <Overview>Deutsche CPU-Spracherkennung mit NVIDIA Nemotron Labs Unified ASR 0.6B L37 INT8 über Wyoming. Fehlende oder beschädigte Modelle werden automatisch aus dem festen GitHub-Modell-Release models-l37-v1.0.0 geladen und mit SHA256 geprüft; die Erstinitialisierung kann länger dauern (ca. 693 MiB Modelldownload). Gültige vorhandene Modelle werden ohne erneuten Download verwendet. Persistenter Modellcache, PUID/PGID und eingeschränkter STT-Prozess. Modelllizenz OpenMDW-1.1; NVIDIA trainierte das Modell, dieses Projekt übernimmt ONNX-Export und partielle Encoderquantisierung. Kein offizieller Server-v1.0.0-Release.</Overview>
   <Category>HomeAutomation:</Category>
   <WebUI/>
   <Icon>https://raw.githubusercontent.com/marco-taylor/nemotron-unified-wyoming/main/assets/icons/nemotron-lowq.png</Icon>

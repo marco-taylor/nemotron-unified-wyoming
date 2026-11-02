@@ -1,16 +1,6 @@
-# Phase-11-Hinweis (lokal, unveröffentlicht)
-
-Die neuen GitHub-/GHCR-URLs und Icon-Adressen in dieser Anleitung sind geplante Ziele. Vor einer echten Installation müssen Repository, beide Raw-Icons und Image veröffentlicht und geprüft werden. Es wurde keine vorhandene Unraid-Benutzervorlage verändert.
-
-Die drei Grundeinstellungen und sieben erweiterten Variablen aus Phase 10 bleiben erhalten. Neu ist der persistente RW-Modellcache: PUID/PGID muss beim Erstdownload schreiben können. Keine automatischen chown/chmod-Aktionen. Nach Initialisierung blockiert ein zusätzlicher, vererbter seccomp-Filter Dateiänderungen durch den Rust-Prozess. Root-Dateisystem bleibt read-only, Capabilities bleiben auf SETUID/SETGID für den Identitätswechsel begrenzt, danach CapEff=0/NoNewPrivs=1.
-
-**Erstdownload noch blockiert:** Die exakten selbst exportierten L37-Dateien sind derzeit nicht unter einer verifizierten öffentlichen Quelle verfügbar. Es gibt keinen Ersatzdownload. Vorhandene vollständige Modelle werden geprüft und offline verwendet. Nach separater Bereitstellung der exakt gehashten Dateien und Lizenzhinweise werden fehlende oder beschädigte Dateien automatisch geladen; die erste Initialisierung kann länger dauern. Bis dahin keine Neuinstallation mit leerem Modellcache empfehlen. Details: docs/PHASE11_RENAME_AND_MODEL_DOWNLOAD.md.
-
-Bestehende Container, gespeicherte Vorlagen, Image-Namen und Modellpfade bleiben gültig und werden nicht automatisch migriert. Bei späterer Migration alten Modellpfad beibehalten oder in ein neues Ziel kopieren, nie bestehende Gewichte überschreiben. Alten GHCR-Kanal erhalten. Die lokale Verzeichnisumbenennung nutzt einen Kompatibilitätslink am bisherigen Pfad. Vor Apply eigene Variablen und Portzuordnung sichern; benutzerdefinierte Werte bleiben manuell ergänzbar.
-
 # Unraid installieren und gespeicherte Icons umstellen
 
-Aktueller Entwicklungsstand: docs/PHASE6.md. Regulärer Imagekanal ist latest; dev bleibt zur Kompatibilität erhalten. Tagprüfung: docs/LATEST.md. Lokale Builds funktionieren; bestehende Container werden hier nicht automatisch aktualisiert oder neu erstellt.
+Aktueller Veröffentlichungs-/CA-Status: docs/PHASE12_PUBLICATION.md. Migration: docs/MIGRATION.md. Regulärer Imagekanal ist latest; dev bleibt zur Kompatibilität erhalten. Tagprüfung: docs/LATEST.md. Lokale Builds funktionieren; bestehende Container werden hier nicht automatisch aktualisiert oder neu erstellt.
 
 ## Image und Modelle
 
@@ -20,7 +10,7 @@ Nach erfolgreichem GHCR-Workflow und bestätigtem anonymem Pull ist `ghcr.io/mar
 docker build --platform linux/amd64 -t ghcr.io/marco-taylor/nemotron-unified-wyoming:latest .
 ```
 
-Zusammengehörige Modellgewichte gemäß docs/MODELS.md separat bereitstellen und für den Download als RW-Cache nach `/models` mounten (gültige vorhandene Modelle funktionieren auch mit RO-Mount). Standard PUID=99 und PGID=100 muss alle Elternverzeichnisse betreten und Dateien lesen können. Der Entrypoint ändert keine Eigentümer oder Rechte. Keine pauschalen chown/chmod-Aktionen durchführen.
+Das persistente Modellverzeichnis als RW-Cache nach `/models` mounten. Fehlende oder beschädigte L37-Dateien lädt der Container aus dem festen GitHub-Release `models-l37-v1.0.0` und prüft jeden SHA256-Wert. Der erste Start benötigt ca. 693 MiB Download und dauert länger; erst nach geladenem Modell wird Wyoming healthy. Gültige vorhandene Modelle funktionieren offline und weiterhin mit RO-Mount. Details: docs/MODELS.md. Standard PUID=99 und PGID=100 muss Elternverzeichnisse betreten, vorhandene Dateien lesen und für Downloads im Cache schreiben können. Der Entrypoint ändert keine Eigentümer oder Rechte. Keine pauschalen chown/chmod-Aktionen durchführen.
 
 ## DockerMan-Vorlage
 
@@ -28,7 +18,7 @@ config/unraid-template.xml ist die Projektvorlage. Bei einer neuen manuellen Ins
 
 Repository für den lokalen Build auf `ghcr.io/marco-taylor/nemotron-unified-wyoming:latest` setzen. Den voreingetragenen GHCR-Kanal erst nach erfolgreicher Veröffentlichung nutzen. Bridge, Privileged=false, Modellmount RW nur zur Initialisierung; Dateisystem-Schreibsperre im eigentlichen STT-Prozess; freier Hostport standardmäßig 10310 auf Containerport 10300/TCP. Keine GPU, kein Docker-Socket und kein Hostnetz erforderlich.
 
-Die lokale Phase-10-Vorlage zeigt genau drei projektspezifische Grundeinstellungen. Unraids eigene Felder wie Containername, Repository und Netzwerkmodus bleiben Teil der Oberfläche. Dieser Stand ist noch nicht in CA veröffentlicht.
+Die vereinfachte Vorlage zeigt genau drei projektspezifische Grundeinstellungen. Unraids eigene Felder wie Containername, Repository und Netzwerkmodus bleiben Teil der Oberfläche. Dieser Stand ist noch nicht in CA veröffentlicht.
 
 | Grundeinstellung | Standard |
 |---|---|
@@ -54,7 +44,7 @@ In Unraid 7.3.4 ordnet `Display="advanced"` diese Einträge dem zunächst eingek
 
 ### Interne Defaults und manuelle Sonderwerte
 
-Elf technische Variablen sind nicht mehr als eigene Template-Einträge vorhanden. Server, Image und Entrypoint behalten ihre bisherigen Defaults: `WYOMING_HOST=0.0.0.0`, `WYOMING_PORT=10300`, `LANGUAGE=de`, `STT_DEVICE=cpu`, `MODEL_DIR=/models`, `MAX_AUDIO_CHUNK_BYTES=320000` und `INFERENCE_CHUNK_MS=20`. Ohne Einzelpfade werden `/models/encoder.int8.onnx`, `/models/decoder.onnx`, `/models/joiner.onnx` und `/models/tokens.txt` verwendet; keine Suche in beliebigen Verzeichnissen . Beim Containerstart prüft die Initialisierung zusätzlich die festen SHA256-Werte; ohne freigegebene Quelle werden fehlende Modelle klar gemeldet.
+Elf technische Variablen sind nicht mehr als eigene Template-Einträge vorhanden. Server, Image und Entrypoint behalten ihre bisherigen Defaults: `WYOMING_HOST=0.0.0.0`, `WYOMING_PORT=10300`, `LANGUAGE=de`, `STT_DEVICE=cpu`, `MODEL_DIR=/models`, `MAX_AUDIO_CHUNK_BYTES=320000` und `INFERENCE_CHUNK_MS=20`. Ohne Einzelpfade werden `/models/encoder.int8.onnx`, `/models/decoder.onnx`, `/models/joiner.onnx` und `/models/tokens.txt` verwendet; keine Suche in beliebigen Verzeichnissen. Beim Containerstart prüft die Initialisierung die festen SHA256-Werte und lädt nur betroffene Dateien aus dem versionierten Modell-Release nach. Verwaiste eigene temporäre Downloads werden unter Sperre bereinigt; keine Löschung unbekannter Dateien oder Originalsicherungen.
 
 Alle 19 Variablen bleiben vollständig unterstützt und dokumentiert in docs/PHASE5_2.md, docs/CONFIGURATION.md und config/variables.json. Für Sonderfälle lassen sich über Unraids Funktion zum Hinzufügen eines Pfads, Ports, einer Variablen, eines Labels oder Geräts wieder **Variable**-Einträge mit dem exakten Schlüssel ergänzen, beispielsweise `ENCODER_PATH` oder `INFERENCE_CHUNK_MS`. Bereits vorhandene Einträge bearbeiten, keine doppelten Schlüssel anlegen. Leere optionale Einzelpfade bedeuten Standarddateien; Modell-Einzelpfade sind Containerpfade. Andere Sprache und GPU bleiben nicht unterstützt.
 
@@ -66,7 +56,7 @@ Bei manuellem `WYOMING_PORT` muss im Bridge-Modus auch der interne Target-Port d
 
 Bei einer Neuinstallation mit der vereinfachten Projektvorlage gelten die drei Grundeinstellungen und sieben erweiterten Defaults. Bei einem normalen Image-Update werden auf dem geprüften Unraid 7.3.4 die vorhandenen gespeicherten Benutzervorlagen verwendet. Die vorhandenen 19 Variablen und manuell ergänzten Werte bleiben damit bestehen; die Oberfläche wird nicht automatisch auf drei Grundeinstellungen reduziert. Das gilt auch für gültige bisherige Werte der elf jetzt weggelassenen Einträge. Die Repo-XML migriert keine laufenden Container.
 
-Wer die vereinfachte Ansicht später bewusst übernehmen möchte, sollte zunächst die gesicherte alte und die neue Vorlage vergleichen, jeden Sonderwert übernehmen und die erzeugten Docker-Argumente prüfen. Nur explizite Werte entfernen, die tatsächlich dem gewünschten Default entsprechen. Eine Änderung über „Apply“ kann einen Container neu erstellen und ist separat zu planen. Diese Phase führt keine solche Migration durch. Die GUI-Version und zusätzliche Plugins können das Verhalten beeinflussen; die Sicherung ist auch bei anderen Unraid-Versionen erforderlich.
+Wer die vereinfachte Ansicht später bewusst übernehmen möchte, sollte zunächst die gesicherte alte und die neue Vorlage vergleichen, jeden Sonderwert übernehmen und die erzeugten Docker-Argumente prüfen. Nur explizite Werte entfernen, die tatsächlich dem gewünschten Default entsprechen. Eine Änderung über „Apply“ kann einen Container neu erstellen und ist separat zu planen. Die Veröffentlichung führt keine solche Migration durch. Die GUI-Version und zusätzliche Plugins können das Verhalten beeinflussen; die Sicherung ist auch bei anderen Unraid-Versionen erforderlich.
 
 ### Bridge- und Host-Netzwerk
 
@@ -121,3 +111,8 @@ Für den derzeit per Docker gestarteten `nemotron-unified-stt` wurde keine passe
 ./.env.example nach ./.env kopieren, Modellpfad und freien Hostport prüfen. ./docker-compose.yml verwendet MODEL_DIR als Host-Mountquelle und `/models` im Container. Erst `docker compose config`, dann bewusst installieren. Lokal `IMAGE=ghcr.io/marco-taylor/nemotron-unified-wyoming:latest`. Der reguläre GHCR-Kanal ist latest; Ergebnisse des anonymen Pulls stehen in docs/LATEST.md. Nur dieser Dienst ist Bestandteil der Compose-Datei.
 
 Home Assistant: Wyoming Protocol mit Unraid-LAN-IP und veröffentlichtem Hostport hinzufügen, anschließend eine deutsche Assist-Testpipeline auswählen. Details: docs/HOME_ASSISTANT.md. Internes VAD/Endpointing und Teiltranskripte fehlen; Home Assistant liefert audio-stop. Der bestehende nemotron-unified-stt bleibt bei Phase 6 unverändert.
+
+
+## Schreibschutz und Modellherkunft
+
+Der RW-Mount erlaubt ausschließlich der Initialisierung den Download als PUID/PGID. Vor exec des Rust-Servers blockiert ein zusätzlicher seccomp-Filter Dateiänderungen durch diesen Prozess und seine Threads. CapEff/CapPrm/CapAmb bleiben 0, NoNewPrivs bleibt 1; es gibt kein automatisches chown bestehender Modelle. Lizenz, NVIDIA-Modellkarte, Herkunft und Exportinformationen befinden sich im Image unter `/usr/share/licenses/nemotron-wyoming/model` sowie im öffentlichen Modell-Release. NVIDIA trainierte die Gewichte; dieses Projekt exportierte und quantisierte den L37-Satz, ohne eigenes Training.

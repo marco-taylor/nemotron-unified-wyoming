@@ -53,6 +53,30 @@ jobs:
           id=$(docker create nemotron-reviewed:main --version)
           trap 'docker rm "$id" >/dev/null' EXIT
           docker export "$id" | python3 scripts/audit_runtime_image.py
+      - name: Verify real public model initialization before pushing tags
+        run: |
+          set -eu
+          name="nemotron-model-gate-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          cleanup() {
+            docker logs "$name" || true
+            docker stop --time 60 "$name" >/dev/null 2>&1 || true
+            docker rm "$name" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+          docker run -d --name "$name" --read-only --network bridge \
+            --cap-drop ALL --cap-add SETUID --cap-add SETGID \
+            --security-opt no-new-privileges:true --memory 4g --cpus 2 --pids-limit 128 \
+            --tmpfs /models:size=1g,uid=99,gid=100,mode=0755,noexec,nosuid,nodev \
+            --tmpfs /tmp:size=16m,noexec,nosuid,nodev nemotron-reviewed:main
+          ready=false
+          for attempt in $(seq 1 600); do
+            if [ "$(docker inspect "$name" --format '{{.State.Running}}')" != true ]; then exit 1; fi
+            if [ "$(docker inspect "$name" --format '{{.State.Health.Status}}')" = healthy ]; then ready=true; break; fi
+            sleep 2
+          done
+          test "$ready" = true
+          docker exec "$name" /usr/local/bin/docker-entrypoint.sh healthcheck
+          docker logs "$name" 2>&1 | grep -q 'model-init: verified and installed encoder.int8.onnx'
       - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
         with:
           registry: ghcr.io

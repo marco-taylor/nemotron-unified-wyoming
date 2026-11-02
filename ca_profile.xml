@@ -4,7 +4,10 @@
     Maintained by GitHub developer marco-taylor, this repository provides
     Nemotron Unified Wyoming, a German CPU-based speech-to-text server
     for Home Assistant and Unraid using the Wyoming protocol.
-    Model weights are provided separately. Project documentation and support
+    Missing L37 models are downloaded from a versioned GitHub model release
+    and verified with pinned SHA256 checksums. NVIDIA trained the original
+    model; this project provides an ONNX adaptation under OpenMDW-1.1.
+    Project documentation and support
     through GitHub Issues are available from the project page.
   </Profile>
   <Icon>https://raw.githubusercontent.com/marco-taylor/nemotron-unified-wyoming/main/assets/icons/nemotron-lowq.png</Icon>

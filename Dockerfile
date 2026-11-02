@@ -62,6 +62,7 @@ LABEL org.opencontainers.image.source="https://github.com/marco-taylor/nemotron-
 ENV MODEL_DIR=/models LANGUAGE=de THREADS=2 WYOMING_HOST=0.0.0.0 WYOMING_PORT=10300
 COPY --chmod=755 scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY scripts/model-init.py config/model-manifest.json config/model-LICENSE.md /usr/local/lib/nemotron/
+COPY releases/models-l37-v1.0.0 /usr/share/licenses/nemotron-wyoming/model
 RUN mkdir -p /models && command -v setpriv
 ENV PUID=99 PGID=100
 # Root only for the UID/GID bootstrap; the server execs as PUID:PGID.

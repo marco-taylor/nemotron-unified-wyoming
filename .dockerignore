@@ -18,6 +18,9 @@
 !scripts/collect_licenses.py
 !scripts/docker-entrypoint.sh
 !scripts/model-init.py
+!releases/
+!releases/models-l37-v1.0.0/
+!releases/models-l37-v1.0.0/**
 # Defence in depth, even below the allowed source directories
 **/__pycache__
 **/*.pyc

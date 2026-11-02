@@ -11,6 +11,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import signal
 import stat
 import sys
@@ -64,12 +65,55 @@ def sync_dir(directory):
         os.close(fd)
 
 
+def partials(paths):
+    """Only our exact tempfile names for the four configured model targets."""
+    for path in paths:
+        pattern = re.compile(re.escape("." + path.name + ".part-") + r"[a-z0-9_]{8}\Z")
+        for candidate in path.parent.glob("." + path.name + ".part-*"):
+            if pattern.fullmatch(candidate.name):
+                yield candidate
+
+
+def cleanup_partials(paths):
+    """Called under the persistent init lock; never remove final/backup files.
+
+    An active download holds a second lock on its tempfile. Refuse symlinks,
+    other owners, directories and hard links, even if their names look familiar.
+    """
+    for path in partials(paths):
+        fd = None
+        try:
+            fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+            meta = os.fstat(fd)
+            if not stat.S_ISREG(meta.st_mode) or meta.st_uid != os.geteuid() or meta.st_nlink != 1:
+                continue
+            try:
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except BlockingIOError:
+                continue
+            current = path.lstat()
+            if (current.st_dev, current.st_ino) != (meta.st_dev, meta.st_ino):
+                continue
+            path.unlink()
+            sync_dir(path.parent)
+            log("removed abandoned download temporary " + path.name)
+        except OSError as error:
+            if error.errno not in (errno.ENOENT, errno.ELOOP, errno.EACCES, errno.EROFS):
+                raise
+            if error.errno in (errno.EACCES, errno.EROFS):
+                log("cannot remove abandoned download temporary; cache permissions unchanged")
+        finally:
+            if fd is not None:
+                os.close(fd)
+
+
 def download(path, entry, opener=receive, deadline=None):
     """Bounded writes, exact hash, same-directory rename; preserve invalid originals."""
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, temporary = tempfile.mkstemp(prefix="." + path.name + ".part-", dir=path.parent)
     temporary = Path(temporary)
     try:
+        fcntl.flock(fd, fcntl.LOCK_EX)
         digest = hashlib.sha256()
         total = 0
         log("downloading " + path.name)
@@ -108,7 +152,8 @@ def download(path, entry, opener=receive, deadline=None):
 
 def ensure_models(directory, entries, paths=None, opener=receive):
     paths = paths or [directory / entry["name"] for entry in entries]
-    if all(valid(path, entry) for path, entry in zip(paths, entries, strict=True)):
+    complete = all(valid(path, entry) for path, entry in zip(paths, entries, strict=True))
+    if complete and not any(partials(paths)):
         log("all four pinned L37 files verified; no download")
         return
     # There is deliberately no guessed URL for the private, custom ONNX export.
@@ -119,8 +164,14 @@ def ensure_models(directory, entries, paths=None, opener=receive):
                            "Provision the verified L37 bundle; see docs/MODELS.md. "
                            "No substitute model will be downloaded.")
     directory.mkdir(parents=True, exist_ok=True)
-    lock_fd = os.open(directory / ".model-init.lock",
-                      os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK, 0o600)
+    try:
+        lock_fd = os.open(directory / ".model-init.lock",
+                          os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK, 0o600)
+    except OSError as error:
+        if complete and error.errno in (errno.EACCES, errno.EROFS):
+            log("all four pinned L37 files verified; read-only cache prevents orphan cleanup; no download")
+            return
+        raise
     with os.fdopen(lock_fd, "r+b") as lock:
         if not stat.S_ISREG(os.fstat(lock.fileno()).st_mode):
             raise RuntimeError("initialization lock is not a regular file")
@@ -134,6 +185,7 @@ def ensure_models(directory, entries, paths=None, opener=receive):
                 if time.monotonic() > deadline:
                     raise RuntimeError("timeout waiting for model initialization lock")
                 time.sleep(0.2)
+        cleanup_partials(paths)
         for path, entry in zip(paths, entries, strict=True):
             if valid(path, entry):
                 continue
@@ -144,6 +196,8 @@ def ensure_models(directory, entries, paths=None, opener=receive):
             download(path, entry, opener, deadline=deadline)
         if not all(valid(path, entry) for path, entry in zip(paths, entries, strict=True)):
             raise RuntimeError("final model verification failed")
+        if complete:
+            log("all four pinned L37 files verified; no download")
 
 
 def restrict_writes():

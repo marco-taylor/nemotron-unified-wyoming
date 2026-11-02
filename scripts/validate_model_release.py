@@ -11,8 +11,10 @@ planned = json.loads((root / "model-manifest.json").read_text())
 assert plan["tag"] == tag and plan["make_latest"] is False
 assert 0 < len(plan["assets"]) <= 1000
 assert len({a["name"] for a in plan["assets"]}) == len(plan["assets"])
-assert all(not e["url"] for e in active["files"]), "Active downloader must remain blocked"
 expected_base = "https://github.com/marco-taylor/nemotron-unified-wyoming/releases/download/" + tag + "/"
+configured = [bool(e["url"]) for e in active["files"]]
+assert all(configured) or not any(configured), "Do not activate only part of the model bundle"
+assert all(not e["url"] or e["url"] == expected_base + e["name"] for e in active["files"])
 assert len(active["files"]) == len(planned["files"]) == 4
 for a, b in zip(active["files"], planned["files"], strict=True):
     assert all(a[k] == b[k] for k in ["name", "size", "sha256"])
@@ -50,4 +52,4 @@ assert "Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES." in (root / "LICENSE
 print(json.dumps({"status": "passed", "assets": len(plan["assets"]),
                   "total_release_bytes": total, "runtime_download_bytes": plan["runtime_download_bytes"],
                   "all_assets_below_2GiB": True, "no_weights_copied": True,
-                  "active_urls_still_unset": True, "checksums_and_notice_origins": "passed"}, indent=2))
+                  "active_urls_configured": all(configured), "checksums_and_notice_origins": "passed"}, indent=2))
