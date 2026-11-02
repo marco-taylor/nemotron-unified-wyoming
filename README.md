@@ -2,7 +2,7 @@
 
 Deutscher Speech-to-Text-Server für Home Assistant und Unraid auf **linux/amd64 mit CPU/AVX2**. Rust verarbeitet Wyoming-TCP, Sitzungen und Audiolimits. Die sichere sherpa-onnx-Anbindung lädt NVIDIA Nemotron Labs Unified ASR 0.6B als geprüften L37-Export mit INT8-Encoder über ONNX Runtime. Python wird nur für Entwicklung und Tests benötigt.
 
-Entwicklungsstand, **kein offizieller v1.0.0-Release**. Repository-Ziel: https://github.com/marco-taylor/nemotron-unified-rust-wyoming. Die Veröffentlichung wartet auf die Entscheidung zur Bereinigung der alten Icon-Historie; Einzelheiten in docs/PHASE6.md. Die Cargo-Paketversion 1.0.0 bezeichnet noch keinen veröffentlichten Release.
+Entwicklungsstand, **kein offizieller v1.0.0-Release**. Repository-Ziel: https://github.com/marco-taylor/nemotron-unified-rust-wyoming. Die öffentliche Historie ist bereinigt; Veröffentlichungs- und Imageprüfungen stehen in docs/PHASE6.md. Die Cargo-Paketversion 1.0.0 bezeichnet noch keinen veröffentlichten Release.
 
 ## Funktionen und Grenzen
 
@@ -86,7 +86,7 @@ PUID/PGID wechseln vor Modellzugriff auf die konfigurierte Identität. Der Boots
 | Low-Q | **Einziger Standard für Unraid CA und Docker** | assets/icons/nemotron-lowq.png | 82.756 Byte | 256 × 256 |
 | HQ | Hochwertige Alternative, kein Unraid-Standard | assets/icons/nemotron-hq.png | 1.560.271 Byte | 1254 × 1254 |
 
-Die XML-Vorlage und das Image-Label `net.unraid.docker.icon` verwenden ausschließlich Low-Q. Beide PNGs haben transparente Pixel und wurden unverändert kopiert. Low-Q erfüllt die Performancevorgaben ohne weitere Komprimierung. Die neuen Quelldateien icons/nemotron-stt-hq.png und icons/nemotron-stt-lowq.png bleiben lokal unverändert erhalten. Die neuen Grafiken zeigen kein erkennbares NVIDIA-Augenlogo oder NVIDIA-Wortlogo und keine ®-/™-Symbole. Die alten Bilder sind im aktuellen Dateistand ersetzt, bleiben aber vorerst in der lokalen Git-Historie enthalten. Geplante Raw-Links und Migration gespeicherter Unraid-Icon-URLs: docs/UNRAID.md. Derzeit sind die Raw-Dateien noch nicht öffentlich erreichbar.
+Die XML-Vorlage und das Image-Label `net.unraid.docker.icon` verwenden ausschließlich Low-Q. Beide PNGs haben transparente Pixel und wurden unverändert kopiert. Low-Q erfüllt die Performancevorgaben ohne weitere Komprimierung. Die neuen Quelldateien icons/nemotron-stt-hq.png und icons/nemotron-stt-lowq.png bleiben lokal unverändert erhalten. Die neuen Grafiken zeigen kein erkennbares NVIDIA-Augenlogo oder NVIDIA-Wortlogo und keine ®-/™-Symbole. Die alten Bilder sind aus der öffentlichen Historie ausgeschlossen; die ursprüngliche Historie ist ausschließlich lokal gesichert. Geplante Raw-Links und Migration gespeicherter Unraid-Icon-URLs: docs/UNRAID.md. Derzeit sind die Raw-Dateien noch nicht öffentlich erreichbar.
 
 ## Entwicklung, Tests und Lizenzen
 

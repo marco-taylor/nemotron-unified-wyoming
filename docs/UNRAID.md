@@ -48,7 +48,7 @@ HQ bleibt eine optionale Alternative im Repository:
 
 https://raw.githubusercontent.com/marco-taylor/nemotron-unified-rust-wyoming/main/assets/icons/nemotron-hq.png
 
-Beide Dateien sind lokal vorhanden. Die Links sind bis zum erfolgreichen Push nicht öffentlich nutzbar. Die neuen Icons enthalten visuell kein NVIDIA-Logo. Vor einem Push muss noch entschieden werden, wie die alten Icons aus der öffentlichen Historie ferngehalten werden. Kein HQ-Link wird als Standard in CA, Docker-Übersicht oder Template eingesetzt. Low-Q wird nicht erneut komprimiert.
+Beide Dateien sind lokal vorhanden. Die Links sind bis zum erfolgreichen Push nicht öffentlich nutzbar. Die neuen Icons enthalten visuell kein NVIDIA-Logo. Die öffentliche Historie enthält ausschließlich die neuen Grafiken; die ursprüngliche Historie ist lokal gesichert. Kein HQ-Link wird als Standard in CA, Docker-Übersicht oder Template eingesetzt. Low-Q wird nicht erneut komprimiert.
 
 ## Bereits installierte Anwendung: nur Icon-Metadaten vorbereiten
 

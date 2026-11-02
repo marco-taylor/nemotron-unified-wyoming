@@ -2,7 +2,7 @@
 
 Stand: 02.11.2026. Hauptprojekt: /mnt/nvme/appdata/codex-workspace/nemotron-unified-rust-wyoming. Relative Pfade beziehen sich auf dieses Projekt.
 
-## Aktueller Status
+## Ursprünglicher Stand vor der freigegebenen Historienbereinigung
 
 Die neuen Nemotron-STT-Icons sind geprüft und im aktuellen Projektstand ersetzt. Das neu angelegte öffentliche Repository https://github.com/marco-taylor/nemotron-unified-rust-wyoming ist erreichbar (HTTP 200), öffentlich und noch leer. Branch lokal main, origin unverändert git@github.com:marco-taylor/nemotron-unified-rust-wyoming.git. Der vorhandene SSH-Zugang funktioniert; die GitHub-Anbindung meldet Admin-/Push-Rechte.
 
@@ -102,3 +102,23 @@ Lokales Image: `nemotron-unified-rust-wyoming:phase6-new-icons`, sha256:474faf48
 GitHub Actions: 0 Läufe im noch leeren Repository. Kein Workflow gestartet, kein GHCR-Push und kein anonymer Pull eines neuen dev-Images behauptet. Der frühere Repository-Erstellungsblocker ist behoben; verbleibender Blocker ist ausschließlich die widersprüchliche Vorgabe zur alten Logo-Historie.
 
 Geprüfter lokaler Quellcommit der Ersatzicons: `ef5b6b6d548bf23f11e0d45a5dedda816bb950a1`. Ein folgender reiner Berichtscommit ergänzt diesen Nachweis. Noch kein veröffentlichter Commit und kein GHCR-Digest.
+
+## Freigegebene Historienbereinigung und geprüftes Backup
+
+Der Nutzer hat die Bereinigung ausdrücklich freigegeben. Ausgangsstand: **`c5da1bed933b417bcf4e59478240285eae717f05`**. Die ursprüngliche Historie wurde vor jeder Umstellung vollständig gesichert und nicht gelöscht.
+
+Git-Bundle außerhalb des Projektverzeichnisses:
+
+`/mnt/nvme/appdata/codex-workspace/nemotron-phase6-git-backup-qzC0ZgJz/history.bundle`
+
+SHA256 des Bundles: `99802f1ce1ff375a16a3af5edf4e3925ecfa7fa8b12d7f7caac8f9b87bf528eb`.
+
+`git bundle create --all` sicherte sämtliche damaligen Branch-/Tag-Referenzen und alle fünf erreichbaren Commits. Es gab einen Branch main und keine Tags. `git bundle verify` bestätigt vollständige Historie ohne Voraussetzungen. Wiederherstellung als separates Mirror-Repository unter `/mnt/nvme/appdata/codex-workspace/nemotron-phase6-git-backup-qzC0ZgJz/restore-check.git`; `git fsck --full` erfolgreich. Referenzliste und gesamte erreichbare Commitliste zwischen Quelle und Wiederherstellung sind exakt gleich. Der wiederhergestellte main zeigt auf den angegebenen Ausgangscommit. Prüflogs, Referenzlisten und Bundle-Prüfsumme liegen daneben im Backupverzeichnis.
+
+Die alte Historie bleibt zusätzlich im lokalen Branch `archive/phase6-before-public` erhalten. Dieser Branch und seine Objekte werden nicht veröffentlicht. Es werden ausschließlich refs/heads/main und dessen saubere Abstammung gepusht, niemals --all oder --mirror.
+
+Neue öffentliche Wurzel: **`e62d4dab329e49e00a041e09912133fe77999c9d`**. Sie hat keine Eltern und exakt denselben Git-Tree wie c5da1bed933b417bcf4e59478240285eae717f05. Dadurch bleiben alle 114 geprüften Projektdateien, Rust-/Docker-Konfigurationen, alle 19 Variablen, Dokumentation und beide neuen Icons erhalten. Nachfolgende Commits aktualisieren ausschließlich Dokumentationsstatus und Prüfergebnisse.
+
+Index- und HEAD-Historienaudit der neuen Wurzel: jeweils 114 Dateien / 2.815.158 Byte, keine Secrets, Gewichte, Buildartefakte oder alten NVIDIA-Logo-Bytes. Die beiden bekannten alten Bildhashes sind im Auditor ausdrücklich gesperrt. Die lokale Archivhistorie enthält diese Bilder weiterhin und gehört ausdrücklich nicht zum Veröffentlichungsumfang. Kein Force-Push und keine Löschung alter Git-Objekte.
+
+Der frühere Historienblocker ist damit behoben. Der erste Push, GitHub-Actions-Läufe, öffentliches GHCR-dev-Image und Raw-URLs werden im nächsten Schritt tatsächlich geprüft. Statusabschnitte oberhalb dieser Ergänzung beschreiben den historischen Zustand vor der Freigabe und sind keine aktuelle Veröffentlichungssperre.
