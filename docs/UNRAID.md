@@ -4,7 +4,7 @@ Aktueller Veröffentlichungs-/CA-Status: docs/PHASE12_PUBLICATION.md. Migration:
 
 ## Image und Modelle
 
-Nach erfolgreichem GHCR-Workflow und bestätigtem anonymem Pull ist `ghcr.io/marco-taylor/nemotron-unified-wyoming:latest` der reguläre Installationskanal. Einen `sha-COMMIT`-Tag oder Digest für feste Installationen verwenden. Alternativ lokal bauen:
+`ghcr.io/marco-taylor/nemotron-unified-wyoming:latest` ist öffentlich und der reguläre Installationskanal. Anonymer Pull wurde mit leerer Docker-Anmeldekonfiguration geprüft. Einen `sha-COMMIT`-Tag oder Digest für feste Installationen verwenden; geprüfte Digests stehen in docs/PHASE12_PUBLICATION.md. Alternativ lokal bauen:
 
 ```sh
 docker build --platform linux/amd64 -t ghcr.io/marco-taylor/nemotron-unified-wyoming:latest .
@@ -16,9 +16,9 @@ Das persistente Modellverzeichnis als RW-Cache nach `/models` mounten. Fehlende 
 
 config/unraid-template.xml ist die Projektvorlage. Bei einer neuen manuellen Installation unter einem freien Namen nach `/boot/config/plugins/dockerMan/templates-user/my-nemotron-unified-wyoming.xml` kopieren und im Docker-Tab „Add Container“ auswählen. Vorhandene Benutzervorlagen vorher sichern und nicht überschreiben. Eine XML-Prüfung oder GitHub-Veröffentlichung bedeutet noch keine Aufnahme in Community Applications.
 
-Repository für den lokalen Build auf `ghcr.io/marco-taylor/nemotron-unified-wyoming:latest` setzen. Den voreingetragenen GHCR-Kanal erst nach erfolgreicher Veröffentlichung nutzen. Bridge, Privileged=false, Modellmount RW nur zur Initialisierung; Dateisystem-Schreibsperre im eigentlichen STT-Prozess; freier Hostport standardmäßig 10310 auf Containerport 10300/TCP. Keine GPU, kein Docker-Socket und kein Hostnetz erforderlich.
+Repository auf `ghcr.io/marco-taylor/nemotron-unified-wyoming:latest` setzen. Bridge, Privileged=false, Modellmount RW zur Initialisierung und gezielten Reparatur; Dateisystem-Schreibsperre im eigentlichen STT-Prozess; freier Hostport standardmäßig 10310 auf Containerport 10300/TCP. Keine GPU, kein Docker-Socket und kein Hostnetz erforderlich.
 
-Die vereinfachte Vorlage zeigt genau drei projektspezifische Grundeinstellungen. Unraids eigene Felder wie Containername, Repository und Netzwerkmodus bleiben Teil der Oberfläche. Dieser Stand ist noch nicht in CA veröffentlicht.
+Die vereinfachte Vorlage ist auf main veröffentlicht und zeigt genau drei projektspezifische Grundeinstellungen. Unraids eigene Felder wie Containername, Repository und Netzwerkmodus bleiben Teil der Oberfläche. Der bestehende CA-Eintrag wird über denselben Template-Pfad aktualisiert; den bestätigten Feed-Stand nennt docs/PHASE12_PUBLICATION.md. Keine zweite Einreichung anlegen.
 
 | Grundeinstellung | Standard |
 |---|---|

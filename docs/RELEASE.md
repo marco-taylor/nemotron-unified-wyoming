@@ -9,7 +9,9 @@ Phase6 erlaubt öffentliches Repository und Upload nach main. Es wird **kein off
 
 ./.github/workflows/ci.yml baut und prüft Pull Requests und Pushes. ./.github/workflows/publish-ghcr.yml baut linux/amd64 auf Push nach main; der Docker-Build führt Formatierung, alle Tests und Clippy aus. Vor Veröffentlichung werden Architektur, CLI und das exportierte Runtime-Dateisystem auf Modellgewichte geprüft. Erst danach pushen GITHUB_TOKEN und packages:write latest, den kompatiblen dev-Tag und sha-COMMIT desselben Builds. Keine Zugangsdaten im Repository, kein v1.0.0-Tag und keine Release-Erstellung. Manuelle Auslösung verlangt publish=true und Branch main.
 
-Die Registry-Sichtbarkeit muss nach dem ersten Push anonym geprüft werden; ein erfolgreiches Actions-Push allein beweist noch keinen öffentlichen Pull. Workflow-/Publikationsstatus: docs/PHASE6.md.
+Die Registry-Sichtbarkeit muss nach dem ersten Push anonym geprüft werden; ein erfolgreiches Actions-Push allein beweist noch keinen öffentlichen Pull. Workflow-/Publikationsstatus: docs/PHASE12_PUBLICATION.md.
+
+Eine ausdrücklich ausgelöste Übernahme eines bereits validierten Images ist mit `workflow_dispatch`, `publish=true` und `validated_digest=sha256:...` möglich. main wird weiterhin vollständig gebaut und getestet. Anschließend wird ausschließlich das Image dieses festen Digests aus dem eigenen öffentlichen Package ohne Registry-Anmeldung geladen und erneut auf Architektur, Inhalt, CLI und echte leere Modellinitialisierung geprüft. Erst danach erhält genau dieses Image die Tags latest, dev und sha-COMMIT. Ohne Digest-Eingabe wird der neue main-Build veröffentlicht. Reine Markdown-Änderungen lösen keine erneute Image-Veröffentlichung aus; die CI läuft weiterhin.
 
 Vor einem offiziellen Release bleiben der gemeinsame Home-Assistant-/Satellite-/Unraid-Abnahmetest, längerer Betrieb und deutsche Befehlsqualität offen. Lizenz-/Quellhinweise prüfen, öffentliche Imageverfügbarkeit bestätigen und danach gesondert offiziellen Release und Versionstags freigeben. Keine automatische Bereitstellung und kein Ersatz bestehender Container.
 

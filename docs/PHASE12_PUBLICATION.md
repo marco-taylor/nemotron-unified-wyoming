@@ -1,7 +1,8 @@
 # Phase 12 – Veröffentlichung Nemotron Unified Wyoming
 
-Status: Teilveröffentlichung erfolgt; Fortsetzung wartet auf die Public-Sichtbarkeit
-des neuen GHCR-Packages. Noch keine vollständige Veröffentlichungsbestätigung.
+Status am 03.11.2026: Repository, main, Modell-Release und neues GHCR-Package
+sind öffentlich. Die Übernahme im CA-Katalog wird gesondert geprüft; eine
+GitHub-Veröffentlichung ist keine Bestätigung der CA-Feed-Aktualisierung.
 Freigabe des Nutzers gilt für Repository-Umbenennung, den Modell-Release,
 neues GHCR-Image und CA-Aktualisierung nach erfolgreichen Prüfungen.
 
@@ -9,7 +10,7 @@ neues GHCR-Image und CA-Aktualisierung nach erfolgreichen Prüfungen.
 
 Ausgangscommit: `91984c9450e05e8b8593547daa8979438c36e3f7` auf
 `feature/rename-model-download`, mit den noch uncommitteten Phase-11.1-Dateien.
-Unverändertes bisheriges main: `d7af454c269da902b220ea50d23d256220edb376`.
+Bisheriges main: `d7af454c269da902b220ea50d23d256220edb376`.
 Phase 9 bleibt im eigenen Branch/Stash; keine experimentelle Socket-Optimierung
 wurde übernommen. Phase 10, 11 und 11.1 bilden den Veröffentlichungsstand.
 
@@ -38,14 +39,23 @@ kein Force-Push.
 Veröffentlichungsvorbereitung im separaten Branch `release/phase12`:
 Commit `8122e518c4d1717e5e86c0048e1300fececcb0cc`, einschließlich
 Lizenz-/Herkunftsdokumentation und der geprüften Modell-Release-Planung.
-main bleibt bis zum vollständigen lokalen Funktionstest zurückgestellt.
+Dieser Stand wurde vor der main-Übernahme vollständig lokal geprüft.
 
 Der vollständige Funktionstest ist inzwischen bestanden. Funktionscommit
 `01733f79a25c4cf0571d6b047f5fee4c7d4cb8e3` ist auf `release/phase12` gepusht;
-main und damit der bestehende CA-Template-Bezug bleiben bis zur öffentlichen
-Image-Erreichbarkeit bewusst unverändert. Ein zusätzliches vollständiges Bundle
+main und damit der bestehende CA-Template-Bezug wurden bis zur öffentlichen
+Image-Erreichbarkeit bewusst unverändert gelassen. Ein zusätzliches vollständiges Bundle
 `/mnt/nvme/appdata/codex-workspace/nemotron-phase12-backups/phase12.HvuUMQ/functional-progress.bundle`
 wurde verifiziert und tatsächlich in einen separaten Mirror zurückgespielt.
+
+Nach erfolgreichem anonymem Kandidaten-Pull wurde main ohne Force-Push von
+`d7af454c269da902b220ea50d23d256220edb376` auf
+`c16f41d35ff410b38f1c0fd136c1e09bf0b9d71a` vorgespult. Dieser Commit ergänzt
+die kontrollierte Workflow-Übernahme eines festen validierten Image-Digests.
+Seit dem Funktionscommit sind nur Dokumentation und Workflow geändert;
+Rust, Modelle und Inferenz sind identisch. Das zusätzliche vollständige
+`/mnt/nvme/appdata/codex-workspace/nemotron-phase12-backups/phase12.HvuUMQ/completion-before-main.bundle`
+wurde vor der Übernahme erstellt und erfolgreich verifiziert.
 
 ## Modell-Release
 
@@ -124,22 +134,47 @@ Fehlersimulationen verändert. Tests verwenden neue Cache-Dateien; Testcache und
 Sicherungen bleiben zur Nachprüfung lokal erhalten. Eine kurze unabhängige
 Sprachaufnahme prüft die technische Kette, keine repräsentative deutsche WER-Abnahme.
 
-## GHCR-Kandidat und laufende Veröffentlichung
+## Öffentliches GHCR-Image
 
-Das vollständig lokal geprüfte Image ist als Kandidat hochgeladen:
+Das vollständig lokal geprüfte Image bleibt unter seinem Kandidaten-Tag erhalten:
 `ghcr.io/marco-taylor/nemotron-unified-wyoming:validated-phase12-660fd95d171f`.
 Digest `sha256:661f2c7c779e7c13b7fcf40d9a0a2252e8e64b93e1615d7254de5446b038a679`,
 linux/amd64; lokale Image-ID
 `sha256:660fd95d171f1c992858650aeb8828f7acff01488943f147c91da3bfd2f96c87`.
 
-GitHub legte das neue Package zunächst privat an. Die API bietet hier keine
-funktionierende Sichtbarkeitsänderung (gezielter Änderungsversuch HTTP 404);
-der Benutzer wurde um die notwendige einmalige UI-Umstellung auf Public gebeten.
-Bis zur Bestätigung durch anonymen Pull werden main und der CA-Umstieg
-zurückgehalten. Dieser Kandidat ist noch keine bestätigte öffentliche latest-
-Veröffentlichung. Nach öffentlicher Erreichbarkeit soll der geprüfte main-Workflow
-erneut bauen, echte leere Modellinitialisierung bis healthy prüfen und dann
-sha-COMMIT, dev und latest aus demselben Build veröffentlichen.
+GitHub legte das Package zunächst privat an. Nach der Public-Umstellung durch
+den Benutzer funktionierte der Pull mit einer neuen Docker-Konfiguration mit
+`auths={}` ohne GitHub-Zugangsdaten. Anschließend wurden latest und der
+Kompatibilitätstag dev aus exakt diesem Image veröffentlicht. Keine alten Tags
+oder Packages gelöscht. Package: https://github.com/users/marco-taylor/packages/container/package/nemotron-unified-wyoming
+
+Reguläres Image: `ghcr.io/marco-taylor/nemotron-unified-wyoming:latest`.
+Der erwartete Digest für latest und dev ist identisch mit dem validierten
+Kandidaten: `sha256:661f2c7c779e7c13b7fcf40d9a0a2252e8e64b93e1615d7254de5446b038a679`.
+Der manuell ausgelöste main-Workflow baut und testet den aktuellen Quellstand,
+lädt anschließend den festen öffentlichen Kandidaten-Digest, auditiert diesen
+und testet erneut eine echte leere Modellinitialisierung. Danach taggt er exakt
+dieses Image. Ein unabhängig neu gebautes Image muss aufgrund von Buildzeit
+und Revision-Label keinen identischen Digest haben und ersetzt den geprüften
+Kandidaten in dieser Übernahme nicht.
+
+Der automatisch ausgelöste Publish-Lauf wurde durch die explizite Übernahme
+über die bestehende Workflow-Konkurrenzregel abgelöst. Reine spätere Markdown-
+Änderungen starten weiterhin CI, veröffentlichen aber kein neues Image.
+
+Erfolgreicher Publish-/Übernahmelauf:
+https://github.com/marco-taylor/nemotron-unified-wyoming/actions/runs/41542903291
+
+Erfolgreiche unabhängige main-CI mit Release-Build, Formatprüfung, 33 Rust-Tests,
+strengem Clippy, 20 Downloader-Tests und Offline-Fehlerprüfung:
+https://github.com/marco-taylor/nemotron-unified-wyoming/actions/runs/41542884612
+Der abschließende Commit aktualisiert ausschließlich Markdown-Dokumentation und
+verwendet `[skip ci]`; getesteter Programm- und Image-Stand bleiben identisch.
+
+Der anschließende erneute anonyme Pull von latest und dev hat bestanden.
+Beide Registry-Manifeste bestätigen den oben genannten identischen Digest und
+`linux/amd64`. Auch der Commit-Tag
+`sha-c16f41d35ff410b38f1c0fd136c1e09bf0b9d71a` gehört zur kontrollierten Übernahme.
 
 ## Community Applications
 
@@ -149,24 +184,92 @@ Repositoryprofil. Daher keine neue Einreichung/zweite Registrierung. Aktuell zei
 dieser Eintrag noch auf das alte Image und den alten Template-Link. Die Umbenennung
 des GitHub-Repositories leitet diese URL bereits sicher weiter.
 
-Nach öffentlich geprüftem neuen Image wird config/unraid-template.xml am bisherigen
-Pfad veröffentlicht, mit neuem Image, Projektnamen, Low-Q-Icon und TemplateURL.
-Die bestehende Repositoryregistrierung bleibt erhalten. Feed-Übernahme bzw.
-eventuell notwendige Maintainer-/Portaländerung ist danach zu prüfen; eine
-aktualisierte CA-Aufnahme wird ohne Feed-Bestätigung nicht behauptet.
+config/unraid-template.xml ist auf main am bisherigen Pfad veröffentlicht,
+mit neuem Image, Projektnamen, Low-Q-Icon und TemplateURL. Alte Repository- und
+Template-Adressen leiten weiterhin auf dieses Repository. Die bestehende
+Repositoryregistrierung bleibt erhalten; keine doppelte Einreichung angelegt.
 
-## Noch zu bestätigen
+Öffentliches Template:
+https://raw.githubusercontent.com/marco-taylor/nemotron-unified-wyoming/main/config/unraid-template.xml
 
-Public-Sichtbarkeit des neuen Packages und anonymer Pull; main-/Actions-Veröffentlichung
-mit latest/dev-Digests; erneute Tests am Registry-Image; öffentliche Raw-Dateien;
-CA-Feed-Übernahme. Der Zwischenvergleich aller 31 vorbestehenden Container ergab
-keine Änderungen an ID, Config, HostConfig, Mounts, Status, Start-/Endzeit oder
-RestartCount. Die gespeicherte Unraid-Vorlage ist byteidentisch. Das alte Image ist
-lokal und anonym in GHCR unverändert nachgewiesen:
+Das CA-Portal https://ca.unraid.net/submissions verlangt eine gesonderte Anmeldung
+mit dem Unraid-Konto; eine solche Sitzung ist in dieser Umgebung nicht vorhanden.
+Für eine erforderliche Portaländerung muss die **bestehende** Einreichung auf die
+neue Repository-Adresse aktualisiert und Validate/Scan ausgeführt werden.
+GitHub-/GHCR-Anmeldedaten werden dafür weder weitergegeben noch zweckentfremdet.
+Aktueller offizieller Feed-Abgleich und gegebenenfalls noch offene Übernahme
+werden im Abschluss unten ausgewiesen.
+
+Offizielle Anforderungen und Aktualisierungsprüfung:
+https://ca.unraid.net/submit/help und
+https://ca.unraid.net/submit/help/repository-xml.
+
+## Schutz bestehender Installationen
+
+Die erste Phase-12-Zwischenprüfung zeigte 31 unveränderte Container. Bei der
+Fortsetzung hatten ESPHome und teddycloud inzwischen andere IDs: die alten
+IDs `52ca661d7bc4` und `4e1acaf94051` waren nicht mehr vorhanden; stattdessen
+existierten `45baac53a65b` (erstellt 02.11.2026 23:02:04 UTC) und
+`a7592b772c86` (23:01:44 UTC). Diese beiden Container wurden von dieser Arbeit
+nicht bearbeitet. Deshalb wird ausdrücklich **keine unveränderte 31er-Baseline**
+behauptet. Die übrigen 29 stimmen in ID, Config, HostConfig, Mounts, Status,
+Start-/Endzeit, ExitCode und RestartCount mit der ursprünglichen Baseline überein.
+Der alte Nemotron-Container bleibt im vorgefundenen Zustand `created`.
+
+Die gespeicherte Nemotron-Vorlage ist gegenüber der ursprünglichen Baseline
+byteidentisch, SHA256 `88a127b9efd70910dd7613514f9c72d3546aa53257438cf961188d6959d2949b`.
+Zusätzlich wurden bei der Fortsetzung alle 45 gespeicherten Benutzer-XML-Vorlagen
+gehasht und am Abschluss erneut verglichen. Keine Vorlage überschrieben.
+Das alte Image ist lokal und anonym in GHCR unverändert nachgewiesen:
 `sha256:63218a57850d6b5521a13ccdf93b5c19c958657f7b3c530d0ff583dcac7166bf`.
-Nach der verbleibenden Veröffentlichung ist dieser Vergleich nochmals auszuführen.
+Das alte GHCR-Package und dessen Tags werden nicht beschrieben oder entfernt.
 
 Bestehende Container, Modellverzeichnisse und gespeicherte Unraid-Vorlagen
 werden nicht automatisch migriert. Altes GHCR-Package und dessen Tags bleiben
 unverändert erhalten. Bei kritischem Fehler stoppt die Veröffentlichung weiterer
 Bestandteile; bereits hochgeladene Dateien werden nicht automatisch gelöscht.
+
+## Abschlussprüfung am öffentlichen latest
+
+Erneuter vollständiger Lauf mit scripts/test-model-download-release.sh und
+`IMAGE=ghcr.io/marco-taylor/nemotron-unified-wyoming:latest` erfolgreich:
+
+| Prüfung | Tatsächliches Ergebnis |
+|---|---|
+| Anonymer GHCR-Zugriff | Kandidat, latest und dev mit frischer Docker-Konfiguration ohne gespeicherte Zugangsdaten erfolgreich |
+| Leere Erstinstallation | Neues isoliertes Modellverzeichnis, vier HTTPS-Downloads vom festen öffentlichen Release, 726.885.887 Byte |
+| Integrität | Alle vier Größen und SHA256 stimmen mit den oben dokumentierten festen Werten überein |
+| Healthcheck / Wyoming | healthy, describe/info, deutsche Transkription, erwartete Protokollfehler und Audio-Chunk-Limit bestanden |
+| Deutsche Transkription | Neun Anfragen, je drei nach Installation, Neustart und Reparatur: immer `Einsteigen bitte.` |
+| Neustart | Kein zusätzlicher Download; Inodes, mtimes und SHA256 der vier Modelle identisch |
+| Fehlende / beschädigte Datei | Nur tokens bzw. joiner gezielt nachgeladen, andere Dateien unverändert; gesicherte Testoriginale erhalten |
+| Abbruchreste | Kontrollierter eigener Orphan bereinigt; keine finalen Modelldateien verändert |
+| Rechte / Sicherheit | UID 99, GID 100, alle Modell-Dateien 99:100, CapEff/CapPrm/CapAmb=0, NoNewPrivs=1, zwei seccomp-Filter |
+| Unraid-Template | XML und tatsächlicher installierter DockerMan-Parser bestanden; drei Grundeinstellungen, sieben erweiterte Variablen, elf Defaults ausgelassen |
+| Runtime-Variablen | Alle 19 in config/variables.json und Compose erhalten, keine Änderungen an der STT-Inferenz oder Phase-9-Experimente |
+| Öffentliche Raw-Dateien | Template, ca_profile und beide Icons anonym geladen und byteidentisch zum lokalen geprüften Stand |
+| Alte Installation | 29 ursprüngliche Container unverändert, zwei extern ersetzte Container ausdrücklich ausgewiesen; 45 Benutzer-XMLs unverändert |
+| Altes GHCR-Image | Anonym abrufbar, alter Digest unverändert; lokale Image-ID ebenfalls unverändert |
+
+Der Testcontainer wurde kontrolliert beendet und entfernt. Der neue Testcache
+bleibt für die Nachprüfung lokal erhalten. Keine produktiven Container gestartet,
+gestoppt oder neu erstellt; keine Modelle verschoben oder gelöscht.
+
+Öffentliche Icons, unverändert und ausschließlich Low-Q als Standard:
+
+- Low-Q, 82.756 Byte: https://raw.githubusercontent.com/marco-taylor/nemotron-unified-wyoming/main/assets/icons/nemotron-lowq.png
+- HQ, 1.560.271 Byte: https://raw.githubusercontent.com/marco-taylor/nemotron-unified-wyoming/main/assets/icons/nemotron-hq.png
+
+## Offene Punkte
+
+Der offizielle CA-Feed zeigt bei der Abschlusskontrolle weiterhin genau einen
+Eintrag unter `nemotron-unified-rust-wyoming` mit dem alten Image. Die aktualisierte
+Quelle ist bereits auf main öffentlich; die neue CA-Anzeige ist **noch nicht
+bestätigt**. Das bestehende Portal-Listing muss bei Bedarf durch den angemeldeten
+Kontoinhaber aktualisiert/gescannt werden. Der fehlende Unraid-Portalzugang ist
+der verbleibende externe Blocker; keine neue Einreichung angelegt.
+
+Weitere spätere Abnahme: repräsentativer deutscher Sprachkorpus, längerer Betrieb
+und bewusste End-to-End-Abnahme in einer Home-Assistant-Pipeline. Kein offizieller
+Server-v1.0.0-Release erstellt. Die Belege liegen lokal unter docs/evidence/phase12;
+große Testdaten, Modellgewichte und lokale Docker-Konfigurationen bleiben ignoriert.

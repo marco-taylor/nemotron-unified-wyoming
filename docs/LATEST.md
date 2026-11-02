@@ -1,4 +1,19 @@
-Historischer Prüfnachweis für den bisherigen Projektnamen. Den tatsächlichen neuen Veröffentlichungsstand dokumentiert docs/PHASE12_PUBLICATION.md.
+# Phase 12 – aktuelles öffentliches Image
+
+Reguläre Installation: `ghcr.io/marco-taylor/nemotron-unified-wyoming:latest`.
+Der Kompatibilitätstag `dev` bleibt vorhanden. Der validierte linux/amd64-Build
+wird ohne Neubau unter beide Tags übernommen:
+
+`sha256:661f2c7c779e7c13b7fcf40d9a0a2252e8e64b93e1615d7254de5446b038a679`
+
+Der anonyme Pull verwendet eine frische Docker-Konfiguration ohne Zugangsdaten.
+Eine leere Erstinstallation lädt die vier festen L37-Release-Dateien, prüft
+SHA256 und liefert healthy sowie deutsche Wyoming-Transkripte. Beim Neustart
+bleiben Inodes, Zeitstempel und Prüfsummen gleich; kein erneuter Download.
+Actions, endgültiger Tag-Abgleich und CA-Status: docs/PHASE12_PUBLICATION.md.
+
+Die folgenden Angaben sind der historische Prüfnachweis für das bisherige Image.
+Dieses alte Package bleibt unverändert verfügbar.
 
 # latest – regulärer Installationskanal
 

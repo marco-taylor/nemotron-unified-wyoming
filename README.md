@@ -2,7 +2,7 @@
 
 Deutscher Speech-to-Text-Server für Home Assistant und Unraid auf **linux/amd64 mit CPU/AVX2**. Rust verarbeitet Wyoming-TCP, Sitzungen und Audiolimits. Die sichere sherpa-onnx-Anbindung lädt NVIDIA Nemotron Labs Unified ASR 0.6B als geprüften L37-Export mit INT8-Encoder über ONNX Runtime. Die Inferenz und Wyoming-Verarbeitung bleiben in Rust/native; ein kleiner Python-Entrypoint prüft und initialisiert die Modelle vor dem Serverstart.
 
-Entwicklungsstand, **kein offizieller v1.0.0-Release**. Repository: https://github.com/marco-taylor/nemotron-unified-wyoming. Die öffentliche Historie ist bereinigt; Aktueller Veröffentlichungsstatus und Prüfungen: docs/PHASE12_PUBLICATION.md. Die Cargo-Paketversion 1.0.0 bezeichnet noch keinen veröffentlichten Release.
+Entwicklungsstand, **kein offizieller v1.0.0-Release**. Repository: https://github.com/marco-taylor/nemotron-unified-wyoming. Das Image `ghcr.io/marco-taylor/nemotron-unified-wyoming:latest` und der feste Modell-Release sind öffentlich ohne Anmeldung abrufbar. Die öffentliche Historie ist bereinigt; Veröffentlichungsstatus, Digests, Tests und CA-Übernahme: docs/PHASE12_PUBLICATION.md. Die Cargo-Paketversion 1.0.0 bezeichnet noch keinen veröffentlichten Release.
 
 ## Funktionen und Grenzen
 
