@@ -1,6 +1,7 @@
 # Phase 12 – Veröffentlichung Nemotron Unified Wyoming
 
-Status: Durchführung läuft; noch keine vollständige Veröffentlichungsbestätigung.
+Status: Teilveröffentlichung erfolgt; Fortsetzung wartet auf die Public-Sichtbarkeit
+des neuen GHCR-Packages. Noch keine vollständige Veröffentlichungsbestätigung.
 Freigabe des Nutzers gilt für Repository-Umbenennung, den Modell-Release,
 neues GHCR-Image und CA-Aktualisierung nach erfolgreichen Prüfungen.
 
@@ -38,6 +39,13 @@ Veröffentlichungsvorbereitung im separaten Branch `release/phase12`:
 Commit `8122e518c4d1717e5e86c0048e1300fececcb0cc`, einschließlich
 Lizenz-/Herkunftsdokumentation und der geprüften Modell-Release-Planung.
 main bleibt bis zum vollständigen lokalen Funktionstest zurückgestellt.
+
+Der vollständige Funktionstest ist inzwischen bestanden. Funktionscommit
+`01733f79a25c4cf0571d6b047f5fee4c7d4cb8e3` ist auf `release/phase12` gepusht;
+main und damit der bestehende CA-Template-Bezug bleiben bis zur öffentlichen
+Image-Erreichbarkeit bewusst unverändert. Ein zusätzliches vollständiges Bundle
+`/mnt/nvme/appdata/codex-workspace/nemotron-phase12-backups/phase12.HvuUMQ/functional-progress.bundle`
+wurde verifiziert und tatsächlich in einen separaten Mirror zurückgespielt.
 
 ## Modell-Release
 
@@ -151,8 +159,12 @@ aktualisierte CA-Aufnahme wird ohne Feed-Bestätigung nicht behauptet.
 
 Public-Sichtbarkeit des neuen Packages und anonymer Pull; main-/Actions-Veröffentlichung
 mit latest/dev-Digests; erneute Tests am Registry-Image; öffentliche Raw-Dateien;
-CA-Feed-Übernahme; abschließender Vergleich aller vorbestehenden Container und des
-alten GHCR-Digests.
+CA-Feed-Übernahme. Der Zwischenvergleich aller 31 vorbestehenden Container ergab
+keine Änderungen an ID, Config, HostConfig, Mounts, Status, Start-/Endzeit oder
+RestartCount. Die gespeicherte Unraid-Vorlage ist byteidentisch. Das alte Image ist
+lokal und anonym in GHCR unverändert nachgewiesen:
+`sha256:63218a57850d6b5521a13ccdf93b5c19c958657f7b3c530d0ff583dcac7166bf`.
+Nach der verbleibenden Veröffentlichung ist dieser Vergleich nochmals auszuführen.
 
 Bestehende Container, Modellverzeichnisse und gespeicherte Unraid-Vorlagen
 werden nicht automatisch migriert. Altes GHCR-Package und dessen Tags bleiben

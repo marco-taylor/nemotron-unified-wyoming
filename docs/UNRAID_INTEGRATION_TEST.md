@@ -1,4 +1,4 @@
-Historischer Prüfnachweis für den bisherigen Projektnamen. Das neue Ziel ist noch unveröffentlicht; siehe docs/PHASE11_RENAME_AND_MODEL_DOWNLOAD.md.
+Historischer Prüfnachweis für den bisherigen Projektnamen. Den tatsächlichen neuen Veröffentlichungsstand dokumentiert docs/PHASE12_PUBLICATION.md.
 
 # Nemotron Unified – Unraid-Integrationstest
 
